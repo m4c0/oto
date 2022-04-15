@@ -3,19 +3,37 @@ type music = string option
 type actor = string
 type scene_name = string
 type opcode = Speech of actor * string | Pose of actor * string
-type choice = scene_name * string
-type outcome = Skip of scene_name | WaitThenJump of scene_name | Choice of choice list
+type cast = { left : actor list; middle : actor list; right : actor list }
 
-type cast = {
-  left : actor list;
-  middle : actor list;
-  right : actor list;
-}
-
-type scene = {
-  name : scene_name;
+type scene_meta = {
   background : background;
   music : music;
-  actors : cast;
+  actors : unit -> cast;
   script : opcode list;
 }
+
+let cast ?(left = []) ?(middle = []) ?(right = []) () : cast =
+  { left; middle; right }
+
+let simple_cast ?left ?middle ?right () : cast =
+  {
+    left = Option.to_list left;
+    middle = Option.to_list middle;
+    right = Option.to_list right;
+  }
+
+let empty_cast () = { left = []; middle = []; right = [] }
+
+let scene_meta ?background ?music ?(actors = empty_cast) ?(script = []) () :
+    scene_meta =
+  { background; music; actors; script }
+
+let speak actor line = Speech (actor, line)
+let pose actor id = Pose (actor, id)
+
+type transition =
+  | Continuation of scene
+  | WaitThenJump of scene
+  | Choice of (string * scene) list
+  | EndGame
+and scene = unit -> scene_meta * transition
