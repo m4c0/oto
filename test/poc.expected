@@ -1,14 +1,25 @@
 name: Title
 background: title
 music: romance-1
+actors:
 ---
 name: Intro
 background: restaurant
 music: romance-1
+actors:
+  left:
+    - lefty
+  middle:
+    - midly
+  right:
+    - righty
 ---
 name: Lefty Intro
+actors:
 ---
 name: Midly Intro
+actors:
 ---
 name: Righty Intro
+actors:
 ---
