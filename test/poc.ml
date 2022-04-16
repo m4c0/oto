@@ -12,6 +12,9 @@ let midly_says = speak midly
 let righty_says = speak righty
 let midly_poses = pose midly
 let restaurant_meta = scene_meta ~background:"restaurant" ~music:"romance-1"
+let the_end_meta = scene_meta ~background:"end" ~music:"game-over" "The End"
+let the_end _ = then_endgame the_end_meta
+let pause_then_end c m = (c, fun _ -> then_pause_and_continue m the_end)
 
 let intro_meta =
   restaurant_meta "Intro"
@@ -29,9 +32,9 @@ let intro_meta =
 let intro _ =
   then_choose intro_meta
     [
-      ("Lefty", fun _ -> then_endgame lefty_meta);
-      ("Midly", fun _ -> then_endgame midly_meta);
-      ("Righty", fun _ -> then_endgame righty_meta);
+      pause_then_end "Lefty" lefty_meta;
+      pause_then_end "Midly" midly_meta;
+      pause_then_end "Righty" righty_meta;
     ]
 
 let game : Types.scene = fun _ -> then_continue title_meta intro

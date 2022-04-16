@@ -3,6 +3,7 @@ background: title
 music: romance-1
 actors:
 script:
+outcome: jump to Intro
 ---
 name: Intro
 background: restaurant
@@ -25,12 +26,22 @@ script:
 name: Lefty Intro
 actors:
 script:
+outcome: pause then move to The End
+---
+name: The End
+background: end
+music: game-over
+actors:
+script:
+outcome: end game
 ---
 name: Midly Intro
 actors:
 script:
+outcome: pause then move to The End
 ---
 name: Righty Intro
 actors:
 script:
+outcome: pause then move to The End
 ---
