@@ -32,9 +32,15 @@ let intro _ =
 let game : Oto.scene = fun _ -> (title_meta, Oto.Continuation intro)
 
 let rec to_yaml (fn : Oto.scene) =
+  let print_kv k v =
+    print_string k;
+    print_string ": ";
+    print_endline v
+  in
   let meta, next = fn () in
-  print_string "name: ";
-  print_endline meta.name;
+  print_kv "name" meta.name;
+  Option.iter (print_kv "background") meta.background;
+  Option.iter (print_kv "music") meta.music;
   print_endline "---";
   match next with
   | Continuation s -> to_yaml s
