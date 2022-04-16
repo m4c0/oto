@@ -2,6 +2,7 @@ name: Title
 background: title
 music: romance-1
 actors:
+script:
 ---
 name: Intro
 background: restaurant
@@ -13,13 +14,23 @@ actors:
     - midly
   right:
     - righty
+script:
+  - [lefty] Hello! How are you doing?
+  - [lefty] Do you want to know what's happening?
+  - [righty] Yeah, you! Baby, baby!
+  - [midly] Click one option to select who you want to date
+  - midly poses imponent
+  - [midly] I'm as hot as an idol
 ---
 name: Lefty Intro
 actors:
+script:
 ---
 name: Midly Intro
 actors:
+script:
 ---
 name: Righty Intro
 actors:
+script:
 ---

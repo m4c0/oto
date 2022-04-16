@@ -16,6 +16,19 @@ let rec print_yaml (fn : Types.scene) =
         print_endline ":";
         List.iter (print_val "    - ") l
   in
+  let print_script (scr : Types.opcode) =
+    match scr with
+    | Speech (actor, line) ->
+        print_string "  - [";
+        print_string actor;
+        print_string "] ";
+        print_endline line
+    | Pose (actor, pose) ->
+        print_string "  - ";
+        print_string actor;
+        print_string " poses ";
+        print_endline pose
+  in
   let meta, next = fn () in
   let cast = meta.actors () in
   print_kv "name" meta.name;
@@ -25,6 +38,8 @@ let rec print_yaml (fn : Types.scene) =
   print_cast "left" cast.left;
   print_cast "middle" cast.middle;
   print_cast "right" cast.right;
+  print_endline "script:";
+  List.iter print_script meta.script;
   print_endline "---";
   match next with
   | Continuation s -> print_yaml s
