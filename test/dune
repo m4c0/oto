@@ -1,5 +1,4 @@
-(executable
- (name poc)
+(tests 
+ (names poc)
  (libraries oto)
- (modules poc)
 )

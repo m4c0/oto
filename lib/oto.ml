@@ -6,6 +6,7 @@ type opcode = Speech of actor * string | Pose of actor * string
 type cast = { left : actor list; middle : actor list; right : actor list }
 
 type scene_meta = {
+  name : string;
   background : background;
   music : music;
   actors : unit -> cast;
@@ -24,9 +25,9 @@ let simple_cast ?left ?middle ?right () : cast =
 
 let empty_cast () = { left = []; middle = []; right = [] }
 
-let scene_meta ?background ?music ?(actors = empty_cast) ?(script = []) () :
+let scene_meta ?background ?music ?(actors = empty_cast) ?(script = []) name :
     scene_meta =
-  { background; music; actors; script }
+      { name; background; music; actors; script }
 
 let speak actor line = Speech (actor, line)
 let pose actor id = Pose (actor, id)
