@@ -1,17 +1,7 @@
-type background = string option
-type music = string option
-type actor = string
-type scene_name = string
-type opcode = Speech of actor * string | Pose of actor * string
-type cast = { left : actor list; middle : actor list; right : actor list }
+module Dumper = Dumper
+module Types = Types
 
-type scene_meta = {
-  name : string;
-  background : background;
-  music : music;
-  actors : unit -> cast;
-  script : opcode list;
-}
+open Types
 
 let cast ?(left = []) ?(middle = []) ?(right = []) () : cast =
   { left; middle; right }
@@ -27,14 +17,11 @@ let empty_cast () = { left = []; middle = []; right = [] }
 
 let scene_meta ?background ?music ?(actors = empty_cast) ?(script = []) name :
     scene_meta =
-      { name; background; music; actors; script }
+  { name; background; music; actors; script }
 
 let speak actor line = Speech (actor, line)
 let pose actor id = Pose (actor, id)
-
-type transition =
-  | Continuation of scene
-  | WaitThenJump of scene
-  | Choice of (string * scene) list
-  | EndGame
-and scene = unit -> scene_meta * transition
+let then_endgame meta = (meta, EndGame)
+let then_choose meta choices = (meta, Choice choices)
+let then_continue meta scene = (meta, Continuation scene)
+let then_pause_and_continue meta scene = (meta, WaitThenJump scene)

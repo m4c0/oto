@@ -1,16 +1,18 @@
-let title_meta = Oto.scene_meta ~background:"title" ~music:"romance-1" "Title"
-let lefty_meta = Oto.scene_meta "Lefty Intro"
-let midly_meta = Oto.scene_meta "Midly Intro"
-let righty_meta = Oto.scene_meta "Righty Intro"
-let lefty_says = Oto.speak "lefty"
-let midly_says = Oto.speak "midly"
-let righty_says = Oto.speak "righty"
-let midly_poses = Oto.pose "midly"
-let restaurant_meta = Oto.scene_meta ~background:"restaurant" ~music:"romance-1"
+open Oto
+
+let title_meta = scene_meta ~background:"title" ~music:"romance-1" "Title"
+let lefty_meta = scene_meta "Lefty Intro"
+let midly_meta = scene_meta "Midly Intro"
+let righty_meta = scene_meta "Righty Intro"
+let lefty_says = speak "lefty"
+let midly_says = speak "midly"
+let righty_says = speak "righty"
+let midly_poses = pose "midly"
+let restaurant_meta = scene_meta ~background:"restaurant" ~music:"romance-1"
 
 let intro_meta =
   restaurant_meta "Intro"
-    ~actors:(Oto.simple_cast ~left:"lefty" ~middle:"middly" ~right:"righty")
+    ~actors:(simple_cast ~left:"lefty" ~middle:"middly" ~right:"righty")
     ~script:
       [
         lefty_says "Hello! How are you doing?";
@@ -21,31 +23,12 @@ let intro_meta =
         midly_says "I'm as hot as an idol";
       ]
 
-let lefty _ = (lefty_meta, Oto.EndGame)
-let midly _ = (midly_meta, Oto.EndGame)
-let righty _ = (righty_meta, Oto.EndGame)
+let lefty _ = then_endgame lefty_meta
+let midly _ = then_endgame midly_meta
+let righty _ = then_endgame righty_meta
 
 let intro _ =
-  ( intro_meta,
-    Oto.Choice [ ("Lefty", lefty); ("Midly", midly); ("Righty", righty) ] )
+  then_choose intro_meta [ ("Lefty", lefty); ("Midly", midly); ("Righty", righty) ]
 
-let game : Oto.scene = fun _ -> (title_meta, Oto.Continuation intro)
-
-let rec to_yaml (fn : Oto.scene) =
-  let print_kv k v =
-    print_string k;
-    print_string ": ";
-    print_endline v
-  in
-  let meta, next = fn () in
-  print_kv "name" meta.name;
-  Option.iter (print_kv "background") meta.background;
-  Option.iter (print_kv "music") meta.music;
-  print_endline "---";
-  match next with
-  | Continuation s -> to_yaml s
-  | WaitThenJump s -> to_yaml s
-  | Choice l -> List.iter (fun (_, s) -> to_yaml s) l
-  | EndGame -> ()
-
-let () = to_yaml game
+let game : Types.scene = fun _ -> then_continue title_meta intro
+let () = Dumper.print_yaml game
