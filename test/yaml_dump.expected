@@ -41,6 +41,8 @@ outcome: end game
 ---
 name: Midly Intro
 actors:
+  left:
+    - midly
 script:
 outcome: pause then move to The End
 ---

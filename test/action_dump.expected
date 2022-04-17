@@ -1,0 +1,16 @@
+background title
+music romance-1
+background restaurant
+music romance-1
+cast lefty midly righty
+show left lefty none Hello! How are you doing?
+show left lefty none Do you want to know what's happening?
+show right righty none Yeah, you! Baby, baby!
+show middle middly none Click one option to select who you want to date
+show middle middly imponent I'm as hot as an idol
+choose Lefty Midly Righty
+cast midly
+pause
+music game-over
+end
+----
