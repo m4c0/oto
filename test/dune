@@ -1,4 +1,4 @@
 (tests 
- (names poc)
+ (names yaml_dump)
  (libraries oto)
 )
