@@ -22,6 +22,10 @@ script:
   - [midly] Click one option to select who you want to date
   - midly poses imponent
   - [midly] I'm as hot as an idol
+outcome:
+  - "Lefty" jumps to Lefty Intro
+  - "Midly" jumps to Midly Intro
+  - "Righty" jumps to Righty Intro
 ---
 name: Lefty Intro
 actors:

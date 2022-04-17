@@ -1,3 +1,4 @@
+(* TODO: check for scene equality *)
 module StrSet = Set.Make (String)
 
 let print_yaml (fn : Types.scene) =
@@ -36,10 +37,17 @@ let print_yaml (fn : Types.scene) =
     let meta, _ = s () in
     print_endline meta.name
   in
+  let print_choice (n, (s : Types.scene)) =
+    let meta, _ = s () in
+    print_string "  - \"";
+    print_string n;
+    print_string "\" jumps to ";
+    print_endline meta.name
+  in
   let rec run_if_new (s : Types.scene) =
     let meta, _ = s () in
     match StrSet.find_opt meta.name !done_set with
-    | None -> 
+    | None ->
         done_set := StrSet.add meta.name !done_set;
         print_yaml_impl s
     | _ -> ()
@@ -67,6 +75,8 @@ let print_yaml (fn : Types.scene) =
         print_endline "---";
         run_if_new s
     | Choice l ->
+        print_endline "outcome:";
+        List.iter print_choice l;
         print_endline "---";
         List.iter (fun (_, s) -> run_if_new s) l
     | EndGame ->
