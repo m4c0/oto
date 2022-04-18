@@ -11,4 +11,12 @@ type action =
 
 type t = action Seq.t
 
-let from_scene (_ : Types.scene) : t = Seq.empty
+let background x = Background x
+let music x = Music x
+
+let from_scene (s : Types.scene) : t =
+  let meta, _ = s () in
+  let cmd_from_opt c o = Option.map c o |> Option.to_seq in
+  let bg = cmd_from_opt background meta.background in
+  let m = cmd_from_opt music meta.music in
+  Seq.append bg m
