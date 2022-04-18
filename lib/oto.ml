@@ -1,5 +1,6 @@
 module Dumper = Dumper
 module Types = Types
+module Vm = Vm
 
 open Types
 

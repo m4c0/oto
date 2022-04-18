@@ -1,4 +1,4 @@
 (tests 
- (names yaml_dump)
+ (names action_dump yaml_dump)
  (libraries oto)
 )
