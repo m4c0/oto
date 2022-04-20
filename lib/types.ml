@@ -17,7 +17,8 @@ type scene_meta = {
 type transition =
   | Continuation of scene
   | WaitThenJump of scene
-  | Choice of (string * scene) list
+  | Choice of choice list
   | EndGame
 
+and choice = string * scene
 and scene = unit -> scene_meta * transition

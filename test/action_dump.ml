@@ -13,7 +13,9 @@ let do_action (a : Oto.Vm.action) =
   match a with
   | Background b -> print_command [ "background"; b ]
   | Cast b -> print_command ("cast" :: b)
-  | Choose b -> print_command ("choose" :: b)
+  | Choose b ->
+      let cb = List.map (fun (c, _) -> c) b in
+      print_command ("choose" :: cb)
   | Music b -> print_command [ "music"; b ]
   | Pause -> print_endline "end"
   | Present -> print_endline "present"

@@ -4,7 +4,7 @@ type line = { side : side; actor : string; pose : string option; text : string }
 type action =
   | Background of string
   | Cast of string list
-  | Choose of string list
+  | Choose of Types.choice list
   | Music of string
   | Pause
   | Present
@@ -44,7 +44,7 @@ let rec from_scene (s : Types.scene) : t =
     match transition with
     | WaitThenJump next -> Seq.Cons (Pause, from_scene next)
     | Continuation next -> Seq.Cons (Present, from_scene next)
-    | Choice _ -> Seq.Nil
+    | Choice c -> Seq.Cons (Choose c, Seq.empty)
     | EndGame -> Seq.Nil
   in
-  List.to_seq [ bg; m; next; cast; scr ] |> Seq.concat
+  List.to_seq [ bg; m; cast; scr; next ] |> Seq.concat
