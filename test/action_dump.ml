@@ -13,9 +13,7 @@ let do_action (a : Oto.Vm.action) =
   match a with
   | Background b -> print_command [ "background"; b ]
   | Cast b -> print_command ("cast" :: b)
-  | Choose b ->
-      let cb = List.map (fun (c, _) -> c) b in
-      print_command ("choose" :: cb)
+  | Choose _ -> ()
   | Music b -> print_command [ "music"; b ]
   | Pause -> print_endline "end"
   | Present -> print_endline "present"
@@ -32,6 +30,10 @@ let do_action (a : Oto.Vm.action) =
 let rec run (vm : Oto.Vm.t) =
   match vm () with
   | Nil -> print_endline "----"
+  | Cons (Choose b, _) ->
+      let cb = List.map (fun (c, _) -> c) b in
+      print_command ("choose" :: cb);
+      List.tl b |> List.hd |> fun (_, nvm) -> run nvm
   | Cons (a, nvm) ->
       do_action a;
       run nvm
