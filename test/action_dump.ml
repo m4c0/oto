@@ -16,6 +16,7 @@ let do_action (a : Oto.Vm.action) =
   | Choose b -> print_command ("choose" :: b)
   | Music b -> print_command [ "music"; b ]
   | Pause -> print_endline "end"
+  | Present -> print_endline "present"
   | Speak { side; actor; pose; text } ->
       print_command
         [
