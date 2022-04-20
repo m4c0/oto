@@ -20,8 +20,7 @@ script:
   - [lefty] Do you want to know what's happening?
   - [righty] Yeah, you! Baby, baby!
   - [midly] Click one option to select who you want to date
-  - midly poses imponent
-  - [midly] I'm as hot as an idol
+  - [midly/hot] I'm as hot as an idol
 outcome:
   - "Lefty" jumps to Lefty Intro
   - "Midly" jumps to Midly Intro

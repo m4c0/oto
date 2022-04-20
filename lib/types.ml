@@ -1,8 +1,9 @@
+type actor = string
 type background = string option
 type music = string option
-type actor = string
+type pose = string option
 type scene_name = string
-type opcode = Speech of actor * string | Pose of actor * string
+type opcode = { actor : actor; pose : pose; line : string }
 type cast = { left : actor list; middle : actor list; right : actor list }
 
 type scene_meta = {

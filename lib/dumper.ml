@@ -20,18 +20,16 @@ let print_yaml (fn : Types.scene) =
         print_endline ":";
         List.iter (print_val "    - ") l
   in
-  let print_script (scr : Types.opcode) =
-    match scr with
-    | Speech (actor, line) ->
-        print_string "  - [";
-        print_string actor;
-        print_string "] ";
-        print_endline line
-    | Pose (actor, pose) ->
-        print_string "  - ";
-        print_string actor;
-        print_string " poses ";
-        print_endline pose
+  let print_pose p =
+    print_string "/";
+    print_string p
+  in
+  let print_script ({ actor; pose; line } : Types.opcode) =
+    print_string "  - [";
+    print_string actor;
+    Option.iter print_pose pose;
+    print_string "] ";
+    print_endline line
   in
   let print_title (s : Types.scene) =
     let meta, _ = s () in
