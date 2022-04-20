@@ -15,7 +15,7 @@ let do_action (a : Oto.Vm.action) =
   | Cast b -> print_command ("cast" :: b)
   | Choose _ -> ()
   | Music b -> print_command [ "music"; b ]
-  | Pause -> print_endline "end"
+  | Pause -> print_endline "pause"
   | Present -> print_endline "present"
   | Speak { side; actor; pose; text } ->
       print_command
@@ -33,6 +33,7 @@ let rec run (vm : Oto.Vm.t) =
   | Cons (Choose b, _) ->
       let cb = List.map (fun (c, _) -> c) b in
       print_command ("choose" :: cb);
+      print_endline "----";
       List.tl b |> List.hd |> fun (_, nvm) -> run nvm
   | Cons (a, nvm) ->
       do_action a;

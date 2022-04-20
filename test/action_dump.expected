@@ -13,5 +13,6 @@ choose Lefty Midly Righty
 ----
 cast midly
 pause
+background end
 music game-over
 ----
