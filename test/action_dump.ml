@@ -12,7 +12,6 @@ let str_from_side (s : Oto.Vm.side) =
 let do_action (a : Oto.Vm.action) =
   match a with
   | Background b -> print_command [ "background"; b ]
-  | Cast b -> print_command ("cast" :: b)
   | Choose _ -> ()
   | Music b -> print_command [ "music"; b ]
   | Pause -> print_endline "pause"

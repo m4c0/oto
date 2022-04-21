@@ -3,7 +3,6 @@ type line = { side : side; actor : string; pose : string option; text : string }
 
 type action =
   | Background of string
-  | Cast of string list
   | Choose of (string * t) list
   | Music of string
   | Pause
@@ -13,14 +12,8 @@ type action =
 and t = action Seq.t
 
 let background x = Background x
-let cast x = Cast x
 let music x = Music x
 let cmd_from_opt c o = Option.map c o |> Option.to_seq
-
-let all_cast_of ({ left; middle; right } : Types.cast) =
-  match List.concat [ left; middle; right ] with
-  | [] -> Seq.empty
-  | x -> x |> cast |> Seq.return
 
 let side_of actor ({ left; middle; right } : Types.cast) =
   if List.exists (String.equal actor) left then Left
@@ -37,7 +30,6 @@ let rec from_scene (s : Types.scene) : t =
   let bg = cmd_from_opt background meta.background in
   let m = cmd_from_opt music meta.music in
   let act = meta.actors () in
-  let cast = all_cast_of act in
   let scr = List.to_seq meta.script |> Seq.map (opcode_action act) in
   let next : t =
    fun _ ->
@@ -49,4 +41,4 @@ let rec from_scene (s : Types.scene) : t =
         Seq.Cons (Choose cc, Seq.empty)
     | EndGame -> Seq.Nil
   in
-  List.to_seq [ bg; m; cast; scr; next ] |> Seq.concat
+  List.to_seq [ bg; m; scr; next ] |> Seq.concat

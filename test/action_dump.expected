@@ -3,7 +3,6 @@ music romance-1
 present
 background restaurant
 music romance-1
-cast lefty midly righty
 speak left lefty none Hello! How are you doing?
 speak left lefty none Do you want to know what's happening?
 speak right righty none Yeah, you! Baby, baby!
@@ -11,7 +10,6 @@ speak middle midly none Click one option to select who you want to date
 speak middle midly hot I'm as hot as an idol
 choose Lefty Midly Righty
 ----
-cast midly
 pause
 background end
 music game-over
