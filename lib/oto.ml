@@ -1,4 +1,5 @@
 module Dumper = Dumper
+module Pegasus = Pegasus
 module Types = Types
 module Vm = Vm
 open Types

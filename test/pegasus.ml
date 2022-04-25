@@ -1,0 +1,2 @@
+let () = Oto.Pegasus.run ()
+

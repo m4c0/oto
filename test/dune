@@ -1,4 +1,16 @@
+(library
+ (name poc)
+ (modules poc)
+ (libraries oto)
+)
+(executable
+ (name pegasus)
+ (modules pegasus)
+ (libraries poc oto)
+)
+
 (tests 
  (names action_dump yaml_dump)
- (libraries oto)
+ (modules action_dump yaml_dump)
+ (libraries poc oto)
 )
