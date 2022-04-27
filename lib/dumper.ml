@@ -82,3 +82,6 @@ let print_yaml (fn : Types.scene) =
         print_endline "---"
   in
   print_yaml_impl fn
+
+let print_actions chooser scene =
+  Dumper_action.run chooser @@ Vm.from_scene scene
