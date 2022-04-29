@@ -10,7 +10,7 @@
 )
 
 (tests 
- (names action_dump yaml_dump)
- (modules action_dump yaml_dump)
+ (names action_dump asset_listing yaml_dump)
+ (modules action_dump asset_listing yaml_dump)
  (libraries poc oto)
 )
