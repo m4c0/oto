@@ -1,5 +1,5 @@
 let rec assets_of (acc : string list) = function
-  | [] -> acc
+  | [] -> List.sort_uniq String.compare acc
   | sc :: scl -> assets_of_meta acc scl sc
 
 and assets_of_meta (acc : string list) (scl : Oto.Types.scene list) (sc : Oto.Types.scene) =
