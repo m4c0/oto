@@ -1,12 +1,15 @@
-let rec print_assets (s : Oto.Types.scene) =
-  let ({ background; music; _ } : Oto.Types.scene_meta), next = s () in
-  let print_asset tp file = Filename.concat tp file |> print_endline in
-  let print_opt_asset tp file = Option.iter (print_asset tp) file in
-  print_opt_asset "back" background;
-  print_opt_asset "music" music;
-  match next with
-  | Continuation s | WaitThenJump s -> print_assets s
-  | Choice l -> List.map (fun (_, s) -> s) l |> List.iter print_assets
-  | EndGame -> ()
+let rec assets_of (acc : string list) = function
+  | [] -> acc
+  | sc :: scl -> assets_of_meta acc scl sc
 
-let () = print_assets Poc.game
+and assets_of_meta (acc : string list) (scl : Oto.Types.scene list) (sc : Oto.Types.scene) =
+  let ({ background; music; _ } : Oto.Types.scene_meta), next = sc () in
+  let bg = Option.map (Filename.concat "back") background in
+  let music = Option.map (Filename.concat "music") music in
+  let res = List.map Option.to_list [ bg; music ] |> List.flatten |> List.append acc in
+  match next with
+  | Continuation s | WaitThenJump s -> assets_of_meta res scl s
+  | Choice l -> List.map Oto.Types.scene_of_choice l |> assets_of res
+  | EndGame -> assets_of res scl
+
+let () = assets_of [] [Poc.game] |> List.iter print_endline

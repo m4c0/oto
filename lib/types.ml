@@ -22,3 +22,5 @@ type transition =
 
 and choice = string * scene
 and scene = unit -> scene_meta * transition
+
+let scene_of_choice ((_, s) : choice) = s
