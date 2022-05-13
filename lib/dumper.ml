@@ -85,3 +85,5 @@ let print_yaml (fn : Types.scene) =
 
 let print_actions chooser scene =
   Dumper_action.run chooser @@ Vm.from_scene scene
+
+let assets_of_scene = Dumper_assets.assets_of_scene
