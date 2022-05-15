@@ -1,2 +1,2 @@
-let () = Oto.Pegasus.run ()
+let () = Pegasus.run ()
 

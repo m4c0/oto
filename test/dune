@@ -6,7 +6,7 @@
 (executable
  (name pegasus)
  (modules pegasus)
- (libraries poc oto)
+ (libraries poc pegasus)
 )
 
 (tests 

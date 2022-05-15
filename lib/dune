@@ -1,3 +1,0 @@
-(library 
- (name oto)
- (libraries sdl2))
