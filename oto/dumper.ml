@@ -84,10 +84,9 @@ module Printer (P : Dumper_printer.M) = struct
     in
     print_yaml_impl fn
 
-  include Dumper_action.M(P)
-  let print_actions chooser scene =
-    run chooser @@ Vm.from_scene scene
+  include Dumper_action.M (P)
 
-  include Dumper_assets.M(P)
+  let print_actions chooser scene = run chooser @@ Vm.from_scene scene
+
+  include Dumper_assets.M (P)
 end
-

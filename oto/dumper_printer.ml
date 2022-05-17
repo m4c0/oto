@@ -3,5 +3,3 @@ module type M = sig
 
   val actor_to_string : actor -> string
 end
-
-
