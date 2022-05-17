@@ -1,1 +1,1 @@
-let () = Oto.Dumper.print_yaml Poc.game
+let () = Poc.Printer.print_yaml Poc.game

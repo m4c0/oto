@@ -1,2 +1,1 @@
 let () = Pegasus.run ()
-

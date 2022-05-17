@@ -1,37 +1,41 @@
 type side = Left | Middle | Right
-type line = { side : side; actor : string; pose : string option; text : string }
+type 'a line = { side : side; actor : 'a; pose : string option; text : string }
 
-type action =
+type 'a action =
   | Background of string
-  | Choose of (string * t) list
+  | Choose of (string * 'a t) list
   | Music of string
   | Pause
   | Present
-  | Speak of line
+  | Speak of 'a line
 
-and t = action Seq.t
+and 'a t = 'a action Seq.t
+
+exception ActorNotFoundInCast
 
 let background x = Background x
 let music x = Music x
 let cmd_from_opt c o = Option.map c o |> Option.to_seq
 
-let side_of actor ({ left; middle; right } : Types.cast) =
-  if List.exists (String.equal actor) left then Left
-  else if List.exists (String.equal actor) middle then Middle
-  else if List.exists (String.equal actor) right then Right
-  else "Actor not found in cast: " ^ actor |> failwith
+let side_of actor ({ left; middle; right } : 'a Types.cast) =
+  let eq a = actor == a in
+  let exists = List.exists eq in
+  if exists left then Left
+  else if exists middle then Middle
+  else if exists right then Right
+  else raise ActorNotFoundInCast
 
-let opcode_action cast ({ actor; pose; line } : Types.opcode) =
+let opcode_action cast ({ actor; pose; line } : 'a Types.opcode) =
   let side = side_of actor cast in
   Speak { side; actor; pose; text = line }
 
-let rec from_scene (s : Types.scene) : t =
+let rec from_scene (s : 'a Types.scene) : 'a t =
   let meta, transition = s () in
   let bg = cmd_from_opt background meta.background in
   let m = cmd_from_opt music meta.music in
   let act = meta.actors () in
   let scr = List.to_seq meta.script |> Seq.map (opcode_action act) in
-  let next : t =
+  let next : 'a t =
    fun _ ->
     match transition with
     | WaitThenJump next -> Seq.Cons (Pause, from_scene next)

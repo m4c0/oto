@@ -1,26 +1,25 @@
-type actor = string
 type background = string option
 type music = string option
 type pose = string option
 type scene_name = string
-type opcode = { actor : actor; pose : pose; line : string }
-type cast = { left : actor list; middle : actor list; right : actor list }
+type 'act opcode = { actor : 'act; pose : pose; line : string }
+type 'act cast = { left : 'act list; middle : 'act list; right : 'act list }
 
-type scene_meta = {
+type 'act scene_meta = {
   name : string;
   background : background;
   music : music;
-  actors : unit -> cast;
-  script : opcode list;
+  actors : unit -> 'act cast;
+  script : 'act opcode list;
 }
 
-type transition =
-  | Continuation of scene
-  | WaitThenJump of scene
-  | Choice of choice list
+type 'act transition =
+  | Continuation of 'act scene
+  | WaitThenJump of 'act scene
+  | Choice of 'act choice list
   | EndGame
 
-and choice = string * scene
-and scene = unit -> scene_meta * transition
+and 'act choice = string * 'act scene
+and 'act scene = unit -> 'act scene_meta * 'act transition
 
-let scene_of_choice ((_, s) : choice) = s
+let scene_of_choice ((_, s) : _ choice) = s
