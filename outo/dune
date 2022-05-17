@@ -1,0 +1,3 @@
+(library
+ (name outo)
+ (libraries oto))

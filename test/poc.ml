@@ -38,11 +38,11 @@ let game : _ Types.scene = fun _ -> then_continue title_meta intro
 
 type p_actor = actor
 
-module Printer = Dumper.Printer (struct
+module Printer = struct
   type actor = p_actor
 
   let actor_to_string : actor -> string = function
     | Lefty -> "lefty"
     | Midly -> "midly"
     | Righty -> "righty"
-end)
+end

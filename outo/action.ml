@@ -1,4 +1,4 @@
-module M (P : Dumper_printer.M) = struct
+module M (P : Printer.M) = struct
   let rec print_command = function
     | [] -> print_newline ()
     | [ x ] -> print_endline x
@@ -7,10 +7,10 @@ module M (P : Dumper_printer.M) = struct
         print_string " ";
         print_command xs
 
-  let str_from_side (s : Vm.side) =
+  let str_from_side (s : Oto.Vm.side) =
     match s with Left -> "left" | Right -> "right" | Middle -> "middle"
 
-  let do_action (a : P.actor Vm.action) =
+  let do_action (a : P.actor Oto.Vm.action) =
     match a with
     | Background b -> print_command [ "background"; b ]
     | Choose _ -> ()
@@ -27,7 +27,7 @@ module M (P : Dumper_printer.M) = struct
             text;
           ]
 
-  let rec run chooser (vm : P.actor Vm.t) =
+  let rec run chooser (vm : P.actor Oto.Vm.t) =
     match vm () with
     | Nil -> print_endline "----"
     | Cons (Choose b, _) ->
@@ -38,4 +38,6 @@ module M (P : Dumper_printer.M) = struct
     | Cons (a, nvm) ->
         do_action a;
         run chooser nvm
+
+  let print_actions chooser scene = run chooser @@ Oto.Vm.from_scene scene
 end
