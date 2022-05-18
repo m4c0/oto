@@ -1,6 +1,16 @@
-open Oto
+module Printer = struct
+  type actor = Lefty | Midly | Righty
 
-type actor = Lefty | Midly | Righty
+  let actor_to_string : actor -> string = function
+    | Lefty -> "lefty"
+    | Midly -> "midly"
+    | Righty -> "righty"
+end
+
+open Oto.M (Printer)
+
+type actor = Printer.actor
+type backgrounds = Title | Restaurant | End
 
 let title_meta = scene_meta ~background:"title" ~music:"romance-1" "Title"
 let lefty_meta = scene_meta "Lefty Intro"
@@ -34,15 +44,4 @@ let intro _ =
       pause_then_end "Righty" righty_meta;
     ]
 
-let game : _ Types.scene = fun _ -> then_continue title_meta intro
-
-type p_actor = actor
-
-module Printer = struct
-  type actor = p_actor
-
-  let actor_to_string : actor -> string = function
-    | Lefty -> "lefty"
-    | Midly -> "midly"
-    | Righty -> "righty"
-end
+let game : scene = fun _ -> then_continue title_meta intro

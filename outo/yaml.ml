@@ -1,8 +1,10 @@
 module M (P : Printer.M) = struct
+  module O = Oto.M (P)
+
   (* TODO: check for scene equality *)
   module StrSet = Set.Make (String)
 
-  let print_yaml (fn : _ Oto.Types.scene) =
+  let print_yaml (fn : O.scene) =
     let done_set = ref StrSet.empty in
     let print_kv k v =
       print_string k;
@@ -25,32 +27,32 @@ module M (P : Printer.M) = struct
       print_string "/";
       print_string p
     in
-    let print_script ({ actor; pose; line } : _ Oto.Types.opcode) =
+    let print_script ({ actor; pose; line } : O.opcode) =
       print_string "  - [";
       P.actor_to_string actor |> print_string;
       Option.iter print_pose pose;
       print_string "] ";
       print_endline line
     in
-    let print_title (s : _ Oto.Types.scene) =
+    let print_title (s : O.scene) =
       let meta, _ = s () in
       print_endline meta.name
     in
-    let print_choice (n, (s : _ Oto.Types.scene)) =
+    let print_choice (n, (s : O.scene)) =
       let meta, _ = s () in
       print_string "  - \"";
       print_string n;
       print_string "\" jumps to ";
       print_endline meta.name
     in
-    let rec run_if_new (s : _ Oto.Types.scene) =
+    let rec run_if_new (s : O.scene) =
       let meta, _ = s () in
       match StrSet.find_opt meta.name !done_set with
       | None ->
           done_set := StrSet.add meta.name !done_set;
           print_yaml_impl s
       | _ -> ()
-    and print_yaml_impl (fn : _ Oto.Types.scene) =
+    and print_yaml_impl (fn : O.scene) =
       let meta, next = fn () in
       let cast = meta.actors () in
       print_kv "name" meta.name;
