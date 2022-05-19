@@ -13,6 +13,7 @@ actors:
     - lefty
   middle:
     - midly
+    - midly-hot
   right:
     - righty
 script:
@@ -20,7 +21,7 @@ script:
   - [lefty] Do you want to know what's happening?
   - [righty] Yeah, you! Baby, baby!
   - [midly] Click one option to select who you want to date
-  - [midly/hot] I'm as hot as an idol
+  - [midly-hot] I'm as hot as an idol
 outcome:
   - "Lefty" jumps to Lefty Intro
   - "Midly" jumps to Midly Intro

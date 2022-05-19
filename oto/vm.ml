@@ -2,13 +2,7 @@ module M (D : Types.Domain) = struct
   module Types = Types.M (D)
 
   type side = Left | Middle | Right
-
-  type line = {
-    side : side;
-    actor : D.actor;
-    pose : string option;
-    text : string;
-  }
+  type line = { side : side; actor : D.actor; text : string }
 
   type action =
     | Background of D.background
@@ -34,9 +28,9 @@ module M (D : Types.Domain) = struct
     else if exists right then Right
     else raise ActorNotFoundInCast
 
-  let opcode_action cast ({ actor; pose; line } : Types.opcode) =
+  let opcode_action cast ({ actor; line } : Types.opcode) =
     let side = side_of actor cast in
-    Speak { side; actor; pose; text = line }
+    Speak { side; actor; text = line }
 
   let rec from_scene (s : Types.scene) : t =
     let meta, transition = s () in

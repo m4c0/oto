@@ -19,15 +19,9 @@ module M (P : Printer.M) = struct
     | Music b -> print_command [ "music"; P.music_to_string b ]
     | Pause -> print_endline "pause"
     | Present -> print_endline "present"
-    | Speak { side; actor; pose; text } ->
+    | Speak { side; actor; text } ->
         print_command
-          [
-            "speak";
-            str_from_side side;
-            P.actor_to_string actor;
-            Option.value ~default:"none" pose;
-            text;
-          ]
+          [ "speak"; str_from_side side; P.actor_to_string actor; text ]
 
   let rec run chooser (vm : O.t) =
     match vm () with

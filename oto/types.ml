@@ -5,9 +5,8 @@ module type Domain = sig
 end
 
 module M (D : Domain) = struct
-  type pose = string option
   type scene_name = string
-  type opcode = { actor : D.actor; pose : pose; line : string }
+  type opcode = { actor : D.actor; line : string }
 
   type cast = {
     left : D.actor list;

@@ -1,10 +1,8 @@
 module M (P : Printer.M) = struct
   module O = Oto.M (P)
 
-  let asset_of_script ({ actor; pose; _ } : O.opcode) =
-    let act = P.actor_to_string actor in
-    let ch = match pose with None -> act | Some p -> act ^ "-" ^ p in
-    "char/" ^ ch
+  let asset_of_script ({ actor; _ } : O.opcode) =
+    P.actor_to_string actor |> String.cat "char/"
 
   let rec assets_of (acc : string list) = function
     | [] -> List.sort_uniq String.compare acc

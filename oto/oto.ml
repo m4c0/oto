@@ -20,7 +20,7 @@ module M (D : Domain) = struct
       scene_meta =
     { name; background; music; actors; script }
 
-  let speak ?pose actor line : opcode = { actor; pose; line }
+  let speak actor line : opcode = { actor; line }
   let then_endgame meta = (meta, EndGame)
   let then_choose meta choices = (meta, Choice choices)
   let then_continue meta scene = (meta, Continuation scene)

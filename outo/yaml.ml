@@ -23,14 +23,9 @@ module M (P : Printer.M) = struct
           print_endline ":";
           List.iter print_actor l
     in
-    let print_pose p =
-      print_string "/";
-      print_string p
-    in
-    let print_script ({ actor; pose; line } : O.opcode) =
+    let print_script ({ actor; line } : O.opcode) =
       print_string "  - [";
       P.actor_to_string actor |> print_string;
-      Option.iter print_pose pose;
       print_string "] ";
       print_endline line
     in
