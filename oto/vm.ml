@@ -1,12 +1,11 @@
 module M (D : Types.Domain) = struct
   module Types = Types.M (D)
 
-  type actor = Types.actor
   type side = Left | Middle | Right
 
   type line = {
     side : side;
-    actor : actor;
+    actor : D.actor;
     pose : string option;
     text : string;
   }
