@@ -12,7 +12,9 @@ module M (P : Printer.M) = struct
 
   and assets_of_meta (acc : string list) (scl : O.scene list) (sc : O.scene) =
     let ({ background; music; script; _ } : O.scene_meta), next = sc () in
-    let bm fn base opt = Option.map fn opt |> Option.map (Filename.concat base) in
+    let bm fn base opt =
+      Option.map fn opt |> Option.map (Filename.concat base)
+    in
     let bg = bm P.background_to_string "back" background in
     let music = bm P.music_to_string "music" music in
     let ch = List.map asset_of_script script in

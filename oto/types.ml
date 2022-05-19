@@ -8,7 +8,12 @@ module M (D : Domain) = struct
   type pose = string option
   type scene_name = string
   type opcode = { actor : D.actor; pose : pose; line : string }
-  type cast = { left : D.actor list; middle : D.actor list; right : D.actor list }
+
+  type cast = {
+    left : D.actor list;
+    middle : D.actor list;
+    right : D.actor list;
+  }
 
   type scene_meta = {
     name : string;

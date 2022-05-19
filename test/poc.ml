@@ -27,8 +27,8 @@ let righty_meta = scene_meta "Righty Intro"
 let lefty_says = speak Lefty
 let midly_says ?pose = speak ?pose Midly
 let righty_says = speak Righty
-let restaurant_meta = scene_meta ~background:Restaurant ~music:Romance 
-let the_end_meta = scene_meta ~background:End ~music:GameOver"The End"
+let restaurant_meta = scene_meta ~background:Restaurant ~music:Romance
+let the_end_meta = scene_meta ~background:End ~music:GameOver "The End"
 let the_end _ = then_endgame the_end_meta
 let pause_then_end c m = (c, fun _ -> then_pause_and_continue m the_end)
 
