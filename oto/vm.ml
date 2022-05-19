@@ -11,9 +11,9 @@ module M (D : Types.Domain) = struct
   }
 
   type action =
-    | Background of string
+    | Background of D.background
     | Choose of (string * t) list
-    | Music of string
+    | Music of D.music
     | Pause
     | Present
     | Speak of line

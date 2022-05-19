@@ -1,26 +1,34 @@
 module Printer = struct
   type actor = Lefty | Midly | Righty
+  type background = Title | Restaurant | End
+  type music = Romance | GameOver
 
   let actor_to_string : actor -> string = function
     | Lefty -> "lefty"
     | Midly -> "midly"
     | Righty -> "righty"
+
+  let background_to_string : background -> string = function
+    | Title -> "title"
+    | Restaurant -> "restaurant"
+    | End -> "end"
+
+  let music_to_string : music -> string = function
+    | Romance -> "romance-1"
+    | GameOver -> "game-over"
 end
 
 open Oto.M (Printer)
 
-type actor = Printer.actor
-type backgrounds = Title | Restaurant | End
-
-let title_meta = scene_meta ~background:"title" ~music:"romance-1" "Title"
+let title_meta = scene_meta ~background:Title ~music:Romance "Title"
 let lefty_meta = scene_meta "Lefty Intro"
 let midly_meta = scene_meta "Midly Intro" ~actors:(simple_cast ~left:Midly)
 let righty_meta = scene_meta "Righty Intro"
 let lefty_says = speak Lefty
 let midly_says ?pose = speak ?pose Midly
 let righty_says = speak Righty
-let restaurant_meta = scene_meta ~background:"restaurant" ~music:"romance-1"
-let the_end_meta = scene_meta ~background:"end" ~music:"game-over" "The End"
+let restaurant_meta = scene_meta ~background:Restaurant ~music:Romance 
+let the_end_meta = scene_meta ~background:End ~music:GameOver"The End"
 let the_end _ = then_endgame the_end_meta
 let pause_then_end c m = (c, fun _ -> then_pause_and_continue m the_end)
 

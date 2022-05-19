@@ -14,9 +14,9 @@ module M (P : Printer.M) = struct
 
   let do_action (a : O.action) =
     match a with
-    | Background b -> print_command [ "background"; b ]
+    | Background b -> print_command [ "background"; P.background_to_string b ]
     | Choose _ -> ()
-    | Music b -> print_command [ "music"; b ]
+    | Music b -> print_command [ "music"; P.music_to_string b ]
     | Pause -> print_endline "pause"
     | Present -> print_endline "present"
     | Speak { side; actor; pose; text } ->

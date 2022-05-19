@@ -1,10 +1,10 @@
 module type Domain = sig
   type actor
+  type background
+  type music
 end
 
 module M (D : Domain) = struct
-  type background = string option
-  type music = string option
   type pose = string option
   type scene_name = string
   type opcode = { actor : D.actor; pose : pose; line : string }
@@ -12,8 +12,8 @@ module M (D : Domain) = struct
 
   type scene_meta = {
     name : string;
-    background : background;
-    music : music;
+    background : D.background option;
+    music : D.music option;
     actors : unit -> cast;
     script : opcode list;
   }

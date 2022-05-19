@@ -1,4 +1,6 @@
-module M (D : Types.Domain) = struct
+module type Domain = Types.Domain
+
+module M (D : Domain) = struct
   include Types.M (D)
   include Vm.M (D)
 

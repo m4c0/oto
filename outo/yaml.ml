@@ -55,9 +55,10 @@ module M (P : Printer.M) = struct
     and print_yaml_impl (fn : O.scene) =
       let meta, next = fn () in
       let cast = meta.actors () in
+      let bm fn base opt = Option.map fn opt |> Option.iter (print_kv base) in
       print_kv "name" meta.name;
-      Option.iter (print_kv "background") meta.background;
-      Option.iter (print_kv "music") meta.music;
+      bm P.background_to_string "background" meta.background;
+      bm P.music_to_string "music" meta.music;
       print_endline "actors:";
       print_cast "left" cast.left;
       print_cast "middle" cast.middle;
