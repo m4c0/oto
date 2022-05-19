@@ -9,13 +9,10 @@ name: Intro
 background: restaurant
 music: romance-1
 actors:
-  left:
-    - lefty
-  middle:
-    - midly
-    - midly-hot
-  right:
-    - righty
+  lefty: left
+  midly: middle
+  midly-hot: middle
+  righty: right
 script:
   - [lefty] Hello! How are you doing?
   - [lefty] Do you want to know what's happening?
@@ -41,8 +38,7 @@ outcome: end game
 ---
 name: Midly Intro
 actors:
-  left:
-    - midly
+  midly: left
 script:
 outcome: pause then move to The End
 ---

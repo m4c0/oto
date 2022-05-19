@@ -11,17 +11,17 @@ module M (P : Printer.M) = struct
       print_string ": ";
       print_endline v
     in
-    let print_actor a =
-      print_string "    - ";
-      P.actor_to_string a |> print_endline
+    let print_actor s a =
+      print_string "  ";
+      print_kv a s
     in
-    let print_cast lbl = function
-      | [] -> ()
-      | l ->
-          print_string "  ";
-          print_string lbl;
-          print_endline ":";
-          List.iter print_actor l
+    let print_ca s cl =
+      List.map P.actor_to_string cl |> List.iter (print_actor s)
+    in
+    let print_cast (c : O.cast) =
+      print_ca "left" c.left;
+      print_ca "middle" c.middle;
+      print_ca "right" c.right
     in
     let print_script ({ actor; line } : O.opcode) =
       print_string "  - [";
@@ -55,9 +55,7 @@ module M (P : Printer.M) = struct
       bm P.background_to_string "background" meta.background;
       bm P.music_to_string "music" meta.music;
       print_endline "actors:";
-      print_cast "left" cast.left;
-      print_cast "middle" cast.middle;
-      print_cast "right" cast.right;
+      print_cast cast;
       print_endline "script:";
       List.iter print_script meta.script;
       match next with
