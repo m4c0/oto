@@ -11,17 +11,16 @@ module M (P : Printer.M) = struct
       print_string ": ";
       print_endline v
     in
-    let print_actor s a =
-      print_string "  ";
-      print_kv a s
-    in
-    let print_ca s cl =
-      List.map P.actor_to_string cl |> List.iter (print_actor s)
-    in
-    let print_cast (c : O.cast) =
-      print_ca "left" c.left;
-      print_ca "middle" c.middle;
-      print_ca "right" c.right
+    let print_cast ({ cast; script; _ } : O.scene_meta) =
+      let op_to_str ({ actor; _ } : O.opcode) =
+        let a = P.actor_to_string actor in
+        match cast actor |> Option.map P.side_to_string with
+        | None -> raise O.ActorNotFoundInCast
+        | Some s -> "  " ^ a ^ ": " ^ s
+      in
+      List.map op_to_str script
+      |> List.sort_uniq String.compare
+      |> List.iter print_endline
     in
     let print_script ({ actor; line } : O.opcode) =
       print_string "  - [";
@@ -49,13 +48,12 @@ module M (P : Printer.M) = struct
       | _ -> ()
     and print_yaml_impl (fn : O.scene) =
       let meta, next = fn () in
-      let cast = meta.actors () in
       let bm fn base opt = Option.map fn opt |> Option.iter (print_kv base) in
       print_kv "name" meta.name;
       bm P.background_to_string "background" meta.background;
       bm P.music_to_string "music" meta.music;
       print_endline "actors:";
-      print_cast cast;
+      print_cast meta;
       print_endline "script:";
       List.iter print_script meta.script;
       match next with

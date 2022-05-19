@@ -10,8 +10,8 @@ background: restaurant
 music: romance-1
 actors:
   lefty: left
-  midly: middle
   midly-hot: middle
+  midly: middle
   righty: right
 script:
   - [lefty] Hello! How are you doing?
@@ -40,6 +40,7 @@ name: Midly Intro
 actors:
   midly: left
 script:
+  - [midly] This is me
 outcome: pause then move to The End
 ---
 name: Righty Intro

@@ -2,6 +2,7 @@ module Printer = struct
   type actor = Lefty | Midly | MidlyHot | Righty
   type background = Title | Restaurant | End
   type music = Romance | GameOver
+  type side = Left | Middle | Right
 
   let actor_to_string : actor -> string = function
     | Lefty -> "lefty"
@@ -17,18 +18,28 @@ module Printer = struct
   let music_to_string : music -> string = function
     | Romance -> "romance-1"
     | GameOver -> "game-over"
+
+  let side_to_string : side -> string = function
+    | Left -> "left"
+    | Middle -> "middle"
+    | Right -> "right"
 end
 
 open Oto.M (Printer)
 
-let title_meta = scene_meta ~background:Title ~music:Romance "Title"
-let lefty_meta = scene_meta "Lefty Intro"
-let midly_meta = scene_meta "Midly Intro" ~actors:(simple_cast ~left:Midly)
-let righty_meta = scene_meta "Righty Intro"
 let lefty_says = speak Lefty
 let midly_says = speak Midly
 let midly_hot_says = speak MidlyHot
 let righty_says = speak Righty
+let title_meta = scene_meta ~background:Title ~music:Romance "Title"
+let lefty_meta = scene_meta "Lefty Intro"
+
+let midly_meta =
+  scene_meta "Midly Intro"
+    ~cast:(fun _ -> Some Left)
+    ~script:[ midly_says "This is me" ]
+
+let righty_meta = scene_meta "Righty Intro"
 let restaurant_meta = scene_meta ~background:Restaurant ~music:Romance
 let the_end_meta = scene_meta ~background:End ~music:GameOver "The End"
 let the_end _ = then_endgame the_end_meta
@@ -36,7 +47,10 @@ let pause_then_end c m = (c, fun _ -> then_pause_and_continue m the_end)
 
 let intro_meta =
   restaurant_meta "Intro"
-    ~actors:(cast ~left:[ Lefty ] ~middle:[ Midly; MidlyHot ] ~right:[ Righty ])
+    ~cast:(function
+      | Lefty -> Some Left
+      | Midly | MidlyHot -> Some Middle
+      | Righty -> Some Right)
     ~script:
       [
         lefty_says "Hello! How are you doing?";

@@ -2,23 +2,19 @@ module type Domain = sig
   type actor
   type background
   type music
+  type side
 end
 
 module M (D : Domain) = struct
-  type scene_name = string
+  type cast = D.actor -> D.side option
   type opcode = { actor : D.actor; line : string }
-
-  type cast = {
-    left : D.actor list;
-    middle : D.actor list;
-    right : D.actor list;
-  }
+  type scene_name = string
 
   type scene_meta = {
     name : string;
     background : D.background option;
     music : D.music option;
-    actors : unit -> cast;
+    cast : cast;
     script : opcode list;
   }
 
@@ -31,5 +27,6 @@ module M (D : Domain) = struct
   and choice = string * scene
   and scene = unit -> scene_meta * transition
 
+  let actor_of_opcode ({ actor; _ } : opcode) = actor
   let scene_of_choice ((_, s) : choice) = s
 end

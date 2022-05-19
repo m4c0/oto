@@ -10,6 +10,7 @@ speak middle midly Click one option to select who you want to date
 speak middle midly-hot I'm as hot as an idol
 choose Lefty Midly Righty
 ----
+speak left midly This is me
 pause
 background end
 music game-over

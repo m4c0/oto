@@ -4,21 +4,11 @@ module M (D : Domain) = struct
   include Types.M (D)
   include Vm.M (D)
 
-  let cast ?(left = []) ?(middle = []) ?(right = []) () : cast =
-    { left; middle; right }
+  let empty_cast _ = None
 
-  let simple_cast ?left ?middle ?right () : cast =
-    {
-      left = Option.to_list left;
-      middle = Option.to_list middle;
-      right = Option.to_list right;
-    }
-
-  let empty_cast () = { left = []; middle = []; right = [] }
-
-  let scene_meta ?background ?music ?(actors = empty_cast) ?(script = []) name :
+  let scene_meta ?background ?music ?(cast = empty_cast) ?(script = []) name :
       scene_meta =
-    { name; background; music; actors; script }
+    { name; background; music; cast; script }
 
   let speak actor line : opcode = { actor; line }
   let then_endgame meta = (meta, EndGame)

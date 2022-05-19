@@ -9,9 +9,6 @@ module M (P : Printer.M) = struct
         print_string " ";
         print_command xs
 
-  let str_from_side (s : O.side) =
-    match s with Left -> "left" | Right -> "right" | Middle -> "middle"
-
   let do_action (a : O.action) =
     match a with
     | Background b -> print_command [ "background"; P.background_to_string b ]
@@ -21,7 +18,7 @@ module M (P : Printer.M) = struct
     | Present -> print_endline "present"
     | Speak { side; actor; text } ->
         print_command
-          [ "speak"; str_from_side side; P.actor_to_string actor; text ]
+          [ "speak"; P.side_to_string side; P.actor_to_string actor; text ]
 
   let rec run chooser (vm : O.t) =
     match vm () with

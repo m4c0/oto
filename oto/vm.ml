@@ -1,8 +1,7 @@
 module M (D : Types.Domain) = struct
   module Types = Types.M (D)
 
-  type side = Left | Middle | Right
-  type line = { side : side; actor : D.actor; text : string }
+  type line = { side : D.side; actor : D.actor; text : string }
 
   type action =
     | Background of D.background
@@ -20,24 +19,17 @@ module M (D : Types.Domain) = struct
   let music x = Music x
   let cmd_from_opt c o = Option.map c o |> Option.to_seq
 
-  let side_of actor ({ left; middle; right } : Types.cast) =
-    let eq a = actor == a in
-    let exists = List.exists eq in
-    if exists left then Left
-    else if exists middle then Middle
-    else if exists right then Right
-    else raise ActorNotFoundInCast
-
   let opcode_action cast ({ actor; line } : Types.opcode) =
-    let side = side_of actor cast in
+    let side =
+      match cast actor with Some x -> x | None -> raise ActorNotFoundInCast
+    in
     Speak { side; actor; text = line }
 
   let rec from_scene (s : Types.scene) : t =
     let meta, transition = s () in
     let bg = cmd_from_opt background meta.background in
     let m = cmd_from_opt music meta.music in
-    let act = meta.actors () in
-    let scr = List.to_seq meta.script |> Seq.map (opcode_action act) in
+    let scr = List.to_seq meta.script |> Seq.map (opcode_action meta.cast) in
     let next : t =
      fun _ ->
       match transition with
