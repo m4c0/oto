@@ -27,17 +27,13 @@ end
 
 open Oto.M (Printer)
 
-let lefty_says = speak Lefty
-let midly_says = speak Midly
-let midly_hot_says = speak MidlyHot
-let righty_says = speak Righty
 let title_meta = scene_meta ~background:Title ~music:Romance "Title"
 let lefty_meta = scene_meta "Lefty Intro"
 
 let midly_meta =
   scene_meta "Midly Intro"
     ~cast:(fun _ -> Some Left)
-    ~script:[ midly_says "This is me" ]
+    ~script:[ speak Midly "This is me" ]
 
 let righty_meta = scene_meta "Righty Intro"
 let restaurant_meta = scene_meta ~background:Restaurant ~music:Romance
@@ -53,11 +49,11 @@ let intro_meta =
       | Righty -> Some Right)
     ~script:
       [
-        lefty_says "Hello! How are you doing?";
-        lefty_says "Do you want to know what's happening?";
-        righty_says "Yeah, you! Baby, baby!";
-        midly_says "Click one option to select who you want to date";
-        midly_hot_says "I'm as hot as an idol";
+        speak Lefty "Hello! How are you doing?";
+        speak Lefty "Do you want to know what's happening?";
+        speak Righty "Yeah, you! Baby, baby!";
+        speak Midly "Click one option to select who you want to date";
+        speak MidlyHot "I'm as hot as an idol";
       ]
 
 let intro _ =
