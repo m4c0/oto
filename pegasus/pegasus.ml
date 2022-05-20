@@ -13,13 +13,14 @@ module M (S : Specs) (D : Oto.Domain) = struct
       | Background _ -> print_endline "bg"
       | Choose _ -> print_endline "choo choo"
       | Music _ -> print_endline "mus"
-      | Pause -> print_endline "pause"
-      | Present -> print_endline "present"
       | Speak _ -> print_endline "woof"
+      | _ -> failwith "Done already"
     in
     let run_actions (vm : Oto.t) (s : Cindel.state) =
       match vm () with
-      | Cons (Present, next) -> if s.any_key_down then next else vm
+      | Cons (Pause, next) -> if s.any_key_down then next else vm
+      | Cons (Present, next) ->
+          (* TODO: timer *) if s.any_key_down then next else vm
       | Cons (a, next) ->
           run_action a;
           next
