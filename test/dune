@@ -4,8 +4,8 @@
  (libraries oto outo))
 
 (executable
- (name pegasus)
- (modules pegasus)
+ (name poc_pegasus)
+ (modules poc_pegasus)
  (libraries poc pegasus))
 
 (tests
