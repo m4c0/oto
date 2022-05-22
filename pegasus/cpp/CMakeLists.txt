@@ -14,5 +14,6 @@ execute_process(
   )
 
 add_library(pegasus_cpp STATIC main.cpp)
+target_compile_features(pegasus_cpp PRIVATE cxx_std_20)
 target_include_directories(pegasus_cpp PRIVATE ${OCAML_INC})
 target_link_libraries(pegasus_cpp PRIVATE SDL2::SDL2-static)

@@ -1,16 +1,18 @@
+module Cindel = Cindel
+
 module M (S : sig
   module D : Oto.Domain
 
   val width : int
   val height : int
-  val load_background : D.background -> Sdl.Surface.t
+  val load_background : D.background -> Cindel.surface
 end) =
 struct
   open S
   open Oto.Types (D)
   open Oto.Vm (D)
 
-  type window = { background : Sdl.Texture.t; timer : Ticks.t; vm : t }
+  type window = { background : Cindel.texture; timer : Ticks.t; vm : t }
 
   let present_timeout_ms = 2000
 
@@ -43,7 +45,7 @@ struct
       | Nil -> wnd
     in
 
-    let draw wnd = Sdl.Render.copy ~texture:wnd.background renderer in
+    let draw wnd _ = Cindel.full_blit renderer wnd.background in
 
     let rec main_loop wnd =
       let state = Cindel.event_loop renderer (draw wnd) in

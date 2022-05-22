@@ -1,33 +1,13 @@
 type state = { any_key_down : bool }
+type renderer
+type surface
+type texture
 
-external init_ : unit -> unit = "peg_init"
+external create_empty_texture : renderer -> texture = "peg_create_empty_texture"
+external create_texture : renderer -> surface -> texture = "peg_create_texture"
+external event_loop : renderer -> (unit -> unit) -> state = "peg_event_loop"
+external full_blit : renderer -> texture -> unit = "peg_full_blit"
+external init : int -> int -> renderer = "peg_init"
 
-let init width height =
-  init_ ();
-  let _, renderer =
-    Sdl.Render.create_window_and_renderer ~width ~height ~flags:[]
-  in
-  renderer
-
-let create_texture = Sdl.Texture.create_from_surface
-
-let create_empty_texture renderer =
-  Sdl.Surface.create_rgb ~width:16 ~height:16 ~depth:24
-  |> create_texture renderer
-
-let event_loop renderer fn =
-  let rec loop state =
-    match Sdl.Event.poll_event () with
-    | None ->
-        Sdl.Render.set_draw_color renderer ~rgb:(255, 0, 255) ~a:255;
-        Sdl.Render.clear renderer;
-        fn ();
-        Sdl.Render.render_present renderer;
-        state
-    | Some (Sdl.Event.Quit _) ->
-        Sdl.quit ();
-        exit 0
-    | Some (Sdl.Event.KeyUp _) -> loop { any_key_down = true }
-    | Some _ -> loop state
-  in
-  loop { any_key_down = false }
+external create_color_surface : width:int -> height:int -> rgb:int -> surface
+  = "peg_create_color_surface"
