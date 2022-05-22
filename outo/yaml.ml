@@ -1,52 +1,53 @@
 module M (P : Printer.M) = struct
-  module O = Oto.M (P)
+  open Oto.Types (P)
 
   (* TODO: check for scene equality *)
   module StrSet = Set.Make (String)
 
-  let print_yaml (fn : O.scene) =
+  let print_yaml (fn : scene) =
     let done_set = ref StrSet.empty in
     let print_kv k v =
       print_string k;
       print_string ": ";
       print_endline v
     in
-    let print_cast ({ cast; script; _ } : O.scene_meta) =
-      let op_to_str ({ actor; _ } : O.opcode) =
+    let print_cast ({ cast; script; _ } : scene_meta) =
+      let op_to_str ({ actor; _ } : opcode) =
+        let open Oto.Vm (P) in
         let a = P.actor_to_string actor in
         match cast actor |> Option.map P.side_to_string with
-        | None -> raise O.ActorNotFoundInCast
+        | None -> raise ActorNotFoundInCast
         | Some s -> "  " ^ a ^ ": " ^ s
       in
       List.map op_to_str script
       |> List.sort_uniq String.compare
       |> List.iter print_endline
     in
-    let print_script ({ actor; line } : O.opcode) =
+    let print_script ({ actor; line } : opcode) =
       print_string "  - [";
       P.actor_to_string actor |> print_string;
       print_string "] ";
       print_endline line
     in
-    let print_title (s : O.scene) =
+    let print_title (s : scene) =
       let meta, _ = s () in
       print_endline meta.name
     in
-    let print_choice (n, (s : O.scene)) =
+    let print_choice (n, (s : scene)) =
       let meta, _ = s () in
       print_string "  - \"";
       print_string n;
       print_string "\" jumps to ";
       print_endline meta.name
     in
-    let rec run_if_new (s : O.scene) =
+    let rec run_if_new (s : scene) =
       let meta, _ = s () in
       match StrSet.find_opt meta.name !done_set with
       | None ->
           done_set := StrSet.add meta.name !done_set;
           print_yaml_impl s
       | _ -> ()
-    and print_yaml_impl (fn : O.scene) =
+    and print_yaml_impl (fn : scene) =
       let meta, next = fn () in
       let bm fn base opt = Option.map fn opt |> Option.iter (print_kv base) in
       print_kv "name" meta.name;

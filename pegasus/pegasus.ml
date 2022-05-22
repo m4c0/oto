@@ -1,14 +1,13 @@
-module type Specs = functor (D : Oto.Domain) -> sig
-  open D
-
-  val width : int
-  val height : int
-  val load_background : background -> Sdl.Surface.t
-end
-
-module M (D : Oto.Domain) (S : Specs) = struct
-  open S (D)
-  open Oto.M (D)
+module M
+    (D : Oto.Domain) (S : sig
+      val width : int
+      val height : int
+      val load_background : D.background -> Sdl.Surface.t
+    end) =
+struct
+  open S
+  open Oto.Types (D)
+  open Oto.Vm (D)
 
   type window = { background : Sdl.Texture.t; vm : t }
 

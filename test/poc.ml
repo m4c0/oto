@@ -25,7 +25,8 @@ module Printer = struct
     | Right -> "right"
 end
 
-open Oto.M (Printer)
+open Oto.Builder (Printer)
+open Oto.Types (Printer)
 
 let title_meta = scene_meta ~background:Title ~music:Romance "Title"
 let lefty_meta = scene_meta "Lefty Intro"

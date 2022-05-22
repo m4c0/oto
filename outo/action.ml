@@ -1,5 +1,6 @@
 module M (P : Printer.M) = struct
-  module O = Oto.M (P)
+  open Oto.Builder (P)
+  open Oto.Vm (P)
 
   let rec print_command = function
     | [] -> print_newline ()
@@ -9,7 +10,7 @@ module M (P : Printer.M) = struct
         print_string " ";
         print_command xs
 
-  let do_action (a : O.action) =
+  let do_action (a : action) =
     match a with
     | Background b -> print_command [ "background"; P.background_to_string b ]
     | Choose _ -> ()
@@ -20,7 +21,7 @@ module M (P : Printer.M) = struct
         print_command
           [ "speak"; P.side_to_string side; P.actor_to_string actor; text ]
 
-  let rec run chooser (vm : O.t) =
+  let rec run chooser (vm : t) =
     match vm () with
     | Nil -> print_endline "----"
     | Cons (Choose b, _) ->
@@ -32,5 +33,5 @@ module M (P : Printer.M) = struct
         do_action a;
         run chooser nvm
 
-  let print_actions chooser scene = run chooser @@ O.from_scene scene
+  let print_actions chooser scene = run chooser @@ from_scene scene
 end
