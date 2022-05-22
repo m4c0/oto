@@ -1,9 +1,10 @@
-module M
-    (D : Oto.Domain) (S : sig
-      val width : int
-      val height : int
-      val load_background : D.background -> Sdl.Surface.t
-    end) =
+module M (S : sig
+  module D : Oto.Domain
+
+  val width : int
+  val height : int
+  val load_background : D.background -> Sdl.Surface.t
+end) =
 struct
   open S
   open Oto.Types (D)
