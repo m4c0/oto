@@ -1,7 +1,9 @@
 type state = { any_key_down : bool }
 
+external init_ : unit -> unit = "peg_init"
+
 let init width height =
-  Sdl.init [ `VIDEO ];
+  init_ ();
   let _, renderer =
     Sdl.Render.create_window_and_renderer ~width ~height ~flags:[]
   in

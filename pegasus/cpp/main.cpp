@@ -1,4 +1,12 @@
 #define CAML_NAME_SPACE
+#include "caml/fail.h"
 #include "caml/mlvalues.h"
 
-extern "C" CAMLprim int foo_echo(int v) { return v + 1; }
+#include <SDL.h>
+
+extern "C" CAMLprim value peg_init(value) {
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    caml_failwith("SDL_Init failed");
+  }
+  return Val_unit;
+}
