@@ -9,6 +9,7 @@
 #define CAML_NAME_SPACE
 #include "caml/alloc.h"
 #include "caml/callback.h"
+#include "caml/custom.h"
 #include "caml/fail.h"
 #include "caml/gc.h"
 #include "caml/memory.h"
@@ -28,22 +29,51 @@ extern "C" CAMLprim SDL_Renderer *peg_init(int w, int h) {
   return renderer;
 }
 
-extern "C" CAMLprim SDL_Texture *peg_create_texture(SDL_Renderer *rnd,
-                                                    SDL_Surface *surf) {
-  return SDL_CreateTextureFromSurface(rnd, surf);
+static custom_operations _texture_co{
+    .identifier = "SDL_Texture",
+    .finalize = custom_finalize_default,
+    .compare = custom_compare_default,
+    .hash = custom_hash_default,
+    .serialize = custom_serialize_default,
+    .deserialize = custom_deserialize_default,
+    .compare_ext = custom_compare_ext_default,
+    .fixed_length = custom_fixed_length_default,
+};
+static value _create_texture(SDL_Renderer *rnd, SDL_Surface *surf) {
+  value res = caml_alloc_custom(&_texture_co, sizeof(SDL_Texture *), 0, 1);
+  *reinterpret_cast<SDL_Texture **>(Data_custom_val(res)) =
+      SDL_CreateTextureFromSurface(rnd, surf);
+  return res;
+}
+extern "C" CAMLprim value peg_create_texture(SDL_Renderer *rnd,
+                                             SDL_Surface *surf) {
+  CAMLparam0();
+  CAMLlocal1(res);
+  res = _create_texture(rnd, surf);
+  CAMLreturn(res);
 }
 
-extern "C" CAMLprim SDL_Texture *peg_create_empty_texture(SDL_Renderer *rnd) {
+extern "C" CAMLprim value peg_create_empty_texture(SDL_Renderer *rnd) {
+  CAMLparam0();
+  CAMLlocal1(res);
+
   SDL_Surface *surf = SDL_CreateRGBSurfaceWithFormat(
       0, 16, 16, 24, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGB888);
-  return peg_create_texture(rnd, surf);
+  res = _create_texture(rnd, surf);
+  SDL_FreeSurface(surf);
+
+  CAMLreturn(res);
 }
 
-extern "C" CAMLprim value peg_full_blit(SDL_Renderer *rnd, SDL_Texture *txt) {
-  if (SDL_RenderCopy(rnd, txt, NULL, NULL) < 0) {
+extern "C" CAMLprim void peg_full_blit(SDL_Renderer *rnd, value txt) {
+  CAMLparam1(txt);
+
+  auto t = *reinterpret_cast<SDL_Texture **>(Data_custom_val(txt));
+  if (SDL_RenderCopy(rnd, t, NULL, NULL) < 0) {
     caml_failwith("SDL_RenderCopy failed");
   }
-  return Val_unit;
+
+  CAMLreturn0;
 }
 
 extern "C" CAMLprim value peg_event_loop(SDL_Renderer *rnd, value fn) {
