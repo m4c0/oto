@@ -1,10 +1,4 @@
 #include <SDL.h>
-#include <SDL_events.h>
-#include <SDL_pixels.h>
-#include <SDL_rect.h>
-#include <SDL_render.h>
-#include <SDL_surface.h>
-#include <cstdio>
 #include <cstdlib>
 
 #define CAML_NAME_SPACE
@@ -16,8 +10,9 @@
 #include "caml/memory.h"
 #include "caml/mlvalues.h"
 
+static int l = 0;
 extern "C" CAMLprim SDL_Renderer *peg_init(int w, int h) {
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     caml_failwith("SDL_Init failed");
   }
 
@@ -26,6 +21,26 @@ extern "C" CAMLprim SDL_Renderer *peg_init(int w, int h) {
   if (SDL_CreateWindowAndRenderer(w, h, 0, &window, &renderer) < 0) {
     caml_failwith("SDL_CreateWindowAndRenderer failed");
   }
+
+  SDL_AudioSpec desired{
+      .freq = 44100,
+      .format = AUDIO_F32,
+      .channels = 1,
+      .samples = 4096,
+      .callback =
+          [](void *data, Uint8 *str, int len) {
+            float *f = reinterpret_cast<float *>(str);
+            int lf = len / sizeof(float);
+            for (int i = 0; i < lf; i++) {
+              f[i] = sin((float)(l + i) * 0.05) * 0.25;
+            };
+            l += lf;
+          },
+  };
+  SDL_AudioSpec obtained;
+  auto dev = SDL_OpenAudioDevice(nullptr, 0, &desired, &obtained, 0);
+
+  SDL_PauseAudioDevice(dev, 0);
 
   return renderer;
 }
