@@ -80,17 +80,18 @@ extern "C" CAMLprim void peg_full_blit(SDL_Renderer *rnd, value txt) {
 
 extern "C" CAMLprim value peg_event_loop(SDL_Renderer *rnd, value fn) {
   CAMLparam1(fn);
+  CAMLlocal1(res);
 
   enum res_fields { any_key_down = 0 };
 
-  auto res = caml_alloc(1, 0);
-  Store_field(res, any_key_down, false);
+  res = caml_alloc(1, 0);
+  Store_field(res, any_key_down, Val_false);
 
   SDL_Event e;
   while (SDL_PollEvent(&e)) {
     switch (e.type) {
     case SDL_KEYUP:
-      Store_field(res, any_key_down, true);
+      Store_field(res, any_key_down, Val_true);
       break;
     case SDL_QUIT:
       SDL_Quit();
