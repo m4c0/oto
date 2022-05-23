@@ -4,6 +4,7 @@
 #include <SDL_rect.h>
 #include <SDL_render.h>
 #include <SDL_surface.h>
+#include <cstdio>
 #include <cstdlib>
 
 #define CAML_NAME_SPACE
@@ -31,7 +32,11 @@ extern "C" CAMLprim SDL_Renderer *peg_init(int w, int h) {
 
 static custom_operations _texture_co{
     .identifier = "SDL_Texture",
-    .finalize = custom_finalize_default,
+    .finalize =
+        [](value v) {
+          auto t = *reinterpret_cast<SDL_Texture **>(Data_custom_val(v));
+          SDL_DestroyTexture(t);
+        },
     .compare = custom_compare_default,
     .hash = custom_hash_default,
     .serialize = custom_serialize_default,
@@ -48,18 +53,15 @@ static value _create_texture(SDL_Renderer *rnd, SDL_Surface *surf) {
 extern "C" CAMLprim value peg_create_texture(SDL_Renderer *rnd,
                                              SDL_Surface *surf) {
   CAMLparam0();
-  CAMLlocal1(res);
-  res = _create_texture(rnd, surf);
-  CAMLreturn(res);
+  CAMLreturn(_create_texture(rnd, surf));
 }
 
 extern "C" CAMLprim value peg_create_empty_texture(SDL_Renderer *rnd) {
   CAMLparam0();
-  CAMLlocal1(res);
 
   SDL_Surface *surf = SDL_CreateRGBSurfaceWithFormat(
       0, 16, 16, 24, SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGB888);
-  res = _create_texture(rnd, surf);
+  auto res = _create_texture(rnd, surf);
   SDL_FreeSurface(surf);
 
   CAMLreturn(res);
@@ -78,11 +80,10 @@ extern "C" CAMLprim void peg_full_blit(SDL_Renderer *rnd, value txt) {
 
 extern "C" CAMLprim value peg_event_loop(SDL_Renderer *rnd, value fn) {
   CAMLparam1(fn);
-  CAMLlocal1(res);
 
   enum res_fields { any_key_down = 0 };
 
-  res = caml_alloc(1, 0);
+  auto res = caml_alloc(1, 0);
   Store_field(res, any_key_down, false);
 
   SDL_Event e;
