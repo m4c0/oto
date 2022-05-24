@@ -11,10 +11,16 @@
 #include "caml/mlvalues.h"
 
 static int l = 0;
-extern "C" CAMLprim SDL_Renderer *peg_init(int w, int h) {
+extern "C" CAMLprim value peg_init(value params) {
+  CAMLparam1(params);
+
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     caml_failwith("SDL_Init failed");
   }
+
+  enum { width = 0, height, callback };
+  int w = Field(params, width);
+  int h = Field(params, height);
 
   SDL_Window *window;
   SDL_Renderer *renderer;
@@ -42,7 +48,7 @@ extern "C" CAMLprim SDL_Renderer *peg_init(int w, int h) {
 
   SDL_PauseAudioDevice(dev, 0);
 
-  return renderer;
+  CAMLreturn(reinterpret_cast<value>(renderer));
 }
 
 static custom_operations _texture_co{

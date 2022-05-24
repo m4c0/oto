@@ -17,7 +17,8 @@ struct
   let present_timeout_ms = 2000
 
   let run (s : scene) =
-    let renderer = Cindel.init width height in
+    let music_callback () = () in
+    let renderer = Cindel.init { width; height; music_callback } in
 
     let run_action : action -> unit = function
       | Choose _ -> print_endline "choo choo"

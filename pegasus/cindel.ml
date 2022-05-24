@@ -1,3 +1,4 @@
+type init_params = { width : int; height : int; music_callback : unit -> unit }
 type state = { any_key_down : bool }
 type renderer
 type surface
@@ -7,7 +8,7 @@ external create_empty_texture : renderer -> texture = "peg_create_empty_texture"
 external create_texture : renderer -> surface -> texture = "peg_create_texture"
 external event_loop : renderer -> (unit -> unit) -> state = "peg_event_loop"
 external full_blit : renderer -> texture -> unit = "peg_full_blit"
-external init : int -> int -> renderer = "peg_init"
+external init : init_params -> renderer = "peg_init"
 
 external create_color_surface : width:int -> height:int -> rgb:int -> surface
   = "peg_create_color_surface"
