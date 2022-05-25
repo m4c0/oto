@@ -1,4 +1,13 @@
-type init_params = { width : int; height : int; music_callback : unit -> unit }
+open Bigarray
+
+type float_ba = (float, float32_elt, c_layout) Bigarray.Array1.t
+
+type init_params = {
+  width : int;
+  height : int;
+  music_callback : float_ba -> unit;
+}
+
 type state = { any_key_down : bool }
 type renderer
 type surface

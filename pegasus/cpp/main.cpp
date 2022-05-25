@@ -3,6 +3,7 @@
 
 #define CAML_NAME_SPACE
 #include "caml/alloc.h"
+#include "caml/bigarray.h"
 #include "caml/callback.h"
 #include "caml/custom.h"
 #include "caml/fail.h"
@@ -10,17 +11,33 @@
 #include "caml/memory.h"
 #include "caml/mlvalues.h"
 
-static int l = 0;
+static value ocaml_callback;
+
+static void audio_callback(void *data, Uint8 *str, int len) {
+  CAMLparam0();
+  CAMLlocal1(ba);
+
+  auto flags = static_cast<int>(CAML_BA_FLOAT32) | CAML_BA_C_LAYOUT;
+  ba = caml_ba_alloc_dims(flags, 1, str, len / sizeof(float));
+  caml_callback(ocaml_callback, ba);
+
+  CAMLreturn0;
+}
+
 extern "C" CAMLprim value peg_init(value params) {
   CAMLparam1(params);
 
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     caml_failwith("SDL_Init failed");
   }
+  // TODO: fail if already init
 
   enum { width = 0, height, callback };
   int w = Field(params, width);
   int h = Field(params, height);
+  ocaml_callback = Field(params, callback);
+
+  caml_register_generational_global_root(&ocaml_callback);
 
   SDL_Window *window;
   SDL_Renderer *renderer;
@@ -33,15 +50,7 @@ extern "C" CAMLprim value peg_init(value params) {
       .format = AUDIO_F32,
       .channels = 1,
       .samples = 4096,
-      .callback =
-          [](void *data, Uint8 *str, int len) {
-            float *f = reinterpret_cast<float *>(str);
-            int lf = len / sizeof(float);
-            for (int i = 0; i < lf; i++) {
-              f[i] = sin((float)(l + i) * 0.05) * 0.25;
-            };
-            l += lf;
-          },
+      .callback = audio_callback,
   };
   SDL_AudioSpec obtained;
   auto dev = SDL_OpenAudioDevice(nullptr, 0, &desired, &obtained, 0);

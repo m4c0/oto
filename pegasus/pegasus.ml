@@ -17,7 +17,18 @@ struct
   let present_timeout_ms = 2000
 
   let run (s : scene) =
-    let music_callback () = () in
+    let music_ref = ref 0.0 in
+    let music_callback data =
+      let open Bigarray in
+      let size = Array1.dim data in
+      let rec fill n p =
+        if n == size then music_ref := p
+        else (
+          Array1.set data n (sin p *. 0.25);
+          fill (n + 1) (p +. 0.05))
+      in
+      fill 0 !music_ref
+    in
     let renderer = Cindel.init { width; height; music_callback } in
 
     let run_action : action -> unit = function
