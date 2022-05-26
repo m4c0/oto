@@ -23,7 +23,6 @@ struct
 
     let run_action : action -> unit = function
       | Choose _ -> print_endline "choo choo"
-      | Music _ -> print_endline "mus"
       | Speak _ -> print_endline "woof"
       | _ -> failwith "Done already"
     in
@@ -32,8 +31,8 @@ struct
       match wnd.vm () with
       | Cons (Background b, next) ->
           {
+            wnd with
             background = load_background b |> Cindel.create_texture renderer;
-            timer;
             vm = next;
           }
       | Cons (Music m, next) ->
