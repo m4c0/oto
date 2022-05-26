@@ -10,10 +10,13 @@
 #include "caml/gc.h"
 #include "caml/memory.h"
 #include "caml/mlvalues.h"
+#include "caml/threads.h"
 
-static value ocaml_callback;
+static value ocaml_callback = Val_unit;
 
 static void audio_callback(void *data, Uint8 *str, int len) {
+  caml_acquire_runtime_system();
+
   CAMLparam0();
   CAMLlocal1(ba);
 
@@ -21,6 +24,13 @@ static void audio_callback(void *data, Uint8 *str, int len) {
   ba = caml_ba_alloc_dims(flags, 1, str, len / sizeof(float));
   caml_callback(ocaml_callback, ba);
 
+  caml_release_runtime_system();
+
+  CAMLreturn0;
+}
+extern "C" CAMLprim void peg_set_audio_callback(value cb) {
+  CAMLparam1(cb);
+  caml_modify_generational_global_root(&ocaml_callback, cb);
   CAMLreturn0;
 }
 
