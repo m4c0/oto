@@ -12,11 +12,6 @@ module M (S : Specs.M) = struct
     let audio_callback data = Bigarray.Array1.fill data 0.0 in
     let renderer = Cindel.init { width; height; audio_callback } in
 
-    let run_action : action -> unit = function
-      | Choose _ -> print_endline "choo choo"
-      | Speak _ -> print_endline "woof"
-      | _ -> failwith "Done already"
-    in
     let run_actions (s : State.t) (cin : Cindel.state) : State.t =
       let timer = Ticks.now () in
       match State.step s with
@@ -28,8 +23,11 @@ module M (S : Specs.M) = struct
       | Some (Present, next) ->
           let ms = State.timer_of s |> Ticks.ms_from_now in
           if ms > present_timeout_ms then State.with_timer next timer else s
-      | Some (a, next) ->
-          run_action a;
+      | Some (Speak _, next) ->
+          print_endline "woof";
+          next
+      | Some (Choose _, next) ->
+          print_endline "choo choo";
           next
       | None -> s
     in
