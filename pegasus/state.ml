@@ -29,6 +29,6 @@ module M (S : Specs.M) = struct
       background = S.load_background b |> Cindel.create_texture x.renderer;
     }
 
-  let timer_of x = x.timer
+  let timer_of_in_ms x = Ticks.ms_from_now x.timer
   let with_timer x timer = { x with timer }
 end

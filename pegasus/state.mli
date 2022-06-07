@@ -5,6 +5,6 @@ module M (S : Specs.M) : sig
   val step : t -> (Oto.Vm(S.D).action * t) option
   val background_of : t -> Cindel.texture
   val with_background : t -> S.D.background -> t
-  val timer_of : t -> Ticks.t
+  val timer_of_in_ms : t -> int
   val with_timer : t -> Ticks.t -> t
 end
