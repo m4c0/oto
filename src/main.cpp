@@ -1,21 +1,26 @@
 #include "SDL.h"
 #include "casein.hpp"
 
+#include <memory>
 #include <stdexcept>
 
 static void on_window_created(const casein::event & e) {
+  static std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> wnd { nullptr, &SDL_DestroyWindow };
+  static std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> rnd { nullptr, &SDL_DestroyRenderer };
+
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
     throw std::runtime_error("Failed to initialise SDL");
   }
 
   void * h = e.as<casein::events::create_window>().native_window_handle();
-  SDL_Window * wnd = SDL_CreateWindowFrom(h);
-  if (wnd == nullptr) {
+
+  wnd.reset(SDL_CreateWindowFrom(h));
+  if (!wnd) {
     throw std::runtime_error("Failed to create SDL window");
   }
 
-  SDL_Renderer * r = SDL_CreateRenderer(wnd, -1, 0);
-  if (r == nullptr) {
+  rnd.reset(SDL_CreateRenderer(wnd.get(), -1, 0));
+  if (!rnd) {
     throw std::runtime_error("Failed to create SDL renderer");
   }
 
@@ -31,8 +36,8 @@ static void on_window_created(const casein::event & e) {
 
   SDL_PauseAudioDevice(dev, 0);
 
-  SDL_RenderClear(r);
-  SDL_RenderPresent(r);
+  SDL_RenderClear(rnd.get());
+  SDL_RenderPresent(rnd.get());
 }
 
 void casein_event(const casein::event & e) {
