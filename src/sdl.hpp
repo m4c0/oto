@@ -1,6 +1,14 @@
 #pragma once
 
+struct SDL_Renderer;
+
 namespace oto {
-  void init_sdl(void * handle);
-  void repaint_sdl();
+  class sdl {
+    SDL_Renderer * renderer;
+
+  public:
+    explicit sdl(void * handle);
+
+    void repaint();
+  };
 }

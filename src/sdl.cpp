@@ -4,8 +4,6 @@
 #include <memory>
 #include <stdexcept>
 
-static SDL_Renderer * renderer; // NOLINT
-
 static void init_audio() {
   if (SDL_Init(SDL_INIT_AUDIO) != 0) {
     throw std::runtime_error("Failed to initialise SDL audio");
@@ -24,13 +22,11 @@ static void init_audio() {
   SDL_PauseAudioDevice(dev, 0);
 }
 
-void oto::init_sdl(void * handle) {
-  renderer = static_cast<SDL_Renderer *>(handle);
-
+oto::sdl::sdl(void * handle) : renderer { renderer = static_cast<SDL_Renderer *>(handle) } {
   init_audio();
 }
 
-void oto::repaint_sdl() {
+void oto::sdl::repaint() {
   static constexpr const auto FULL_BRIGHT = 255;
   const auto r = SDL_GetTicks() % FULL_BRIGHT;
   SDL_SetRenderDrawColor(renderer, r, 0, FULL_BRIGHT, FULL_BRIGHT);
