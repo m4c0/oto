@@ -7,11 +7,11 @@ include(FetchContent)
 FetchContent_Declare(
   casein
   GIT_REPOSITORY git@github.com:m4c0/casein
-  GIT_TAG 5d405cd9b0e7afba1391a45221de979466df5d57)
+  GIT_TAG 2cc36b83d7a9b0b355778f892eaa078811fedf62)
 FetchContent_MakeAvailable(casein)
 
 find_package(SDL2 REQUIRED)
 
 add_executable(oto MACOSX_BUNDLE WIN32)
 target_sources(oto PRIVATE src/main.cpp src/sdl.cpp)
-target_link_libraries(oto PUBLIC casein SDL2::SDL2-static)
+target_link_libraries(oto PUBLIC casein-sdl)
