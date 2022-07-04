@@ -23,9 +23,9 @@ namespace oto {
   };
 
   template<domain D>
-  struct opcode {
+  struct line {
     typename D::actor actor;
-    const char * line;
+    const char * text;
   };
 
   template<domain D>
@@ -34,7 +34,7 @@ namespace oto {
     std::optional<typename D::background> background;
     std::optional<typename D::music> music;
     std::optional<typename D::side> (*cast)(typename D::actor);
-    std::span<const opcode<D>> script;
+    std::span<const line<D>> script;
   };
 
   template<domain D>
@@ -91,7 +91,7 @@ namespace poc {
       }
     }
   };
-  using opc = oto::opcode<domain>;
+  using lin = oto::line<domain>;
   using osd = std::optional<domain::side>;
   using scm = oto::scene_meta<domain>;
 
@@ -103,7 +103,7 @@ namespace poc {
   constexpr const auto lefty_meta = scm {
     .name = "Lefty Intro",
   };
-  constexpr const auto midly_script = std::array { opc { domain::midly, "This is me" } };
+  constexpr const auto midly_script = std::array { lin { domain::midly, "This is me" } };
   constexpr const auto midly_meta = scm {
     .name = "Midly Intro",
     .cast = [](auto /*a*/) -> osd {
@@ -127,11 +127,11 @@ namespace poc {
     return base;
   }
   constexpr const auto intro_script = std::array {
-    opc { domain::lefty, "Hello! How are you doing?" },
-    opc { domain::lefty, "Do you want to know what's happening?" },
-    opc { domain::righty, "Yeah, you! Baby, baby!" },
-    opc { domain::midly, "Click one option to select who you want to date" },
-    opc { domain::midly_hot, "I'm as hot as an idol" },
+    lin { domain::lefty, "Hello! How are you doing?" },
+    lin { domain::lefty, "Do you want to know what's happening?" },
+    lin { domain::righty, "Yeah, you! Baby, baby!" },
+    lin { domain::midly, "Click one option to select who you want to date" },
+    lin { domain::midly_hot, "I'm as hot as an idol" },
   };
   constexpr const auto intro_meta = restaurant_meta(scm {
       .cast = [](domain::actor a) -> osd {
