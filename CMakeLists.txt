@@ -13,6 +13,7 @@ FetchContent_MakeAvailable(casein)
 find_package(SDL2 REQUIRED)
 
 add_library(oto STATIC)
+target_include_directories(oto PUBLIC inc)
 target_sources(oto PRIVATE src/main.cpp src/sdl.cpp)
 target_link_libraries(oto PUBLIC casein-sdl)
 
