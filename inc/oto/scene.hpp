@@ -50,10 +50,12 @@ namespace oto {
     const char * name;
     transition<D> next;
   };
+  template<domain D>
+  using choices = std::span<const edge<D>>;
 
   template<domain D>
   struct transition {
     scene_meta<D> from;
-    std::span<const edge<D>> choices;
+    choices<D> choices;
   };
 }

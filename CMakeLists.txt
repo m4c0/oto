@@ -32,5 +32,6 @@ function(dumper NAME)
   set_tests_properties(poc-${NAME}-compare PROPERTIES DEPENDS poc-${NAME}-create)
 endfunction()
 
+dumper(action)
 dumper(assets)
 dumper(yaml)
