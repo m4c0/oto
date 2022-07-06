@@ -6,10 +6,16 @@
 
 namespace poc {}
 
-int main() {
+template<template<typename> typename T>
+int tool(const std::string & pname) {
   try {
-    std::fstream out { "poc.yaml" };
-    oto::dumper::yaml<poc::domain>(out).dump(poc::game);
+    std::string fname = pname + ".yaml";
+    std::ofstream out { fname, std::ios::trunc };
+    if (!out) {
+      std::cerr << "ERROR: failed to open file - " << fname << "\n";
+      return 1;
+    }
+    T<poc::domain>(out).dump(poc::game);
   } catch (const oto::dumper::unnamed_choice & e) {
     std::cerr << "ERROR: Found unnamed choice\n";
     return 1;
@@ -20,4 +26,8 @@ int main() {
     std::cerr << "ERROR: Found actor without cast - " << e.what() << "\n";
     return 1;
   }
+  return 0;
+}
+int main(int /*argc*/, char ** argv) {
+  return tool<oto::dumper::yaml>(*argv);
 }
