@@ -27,5 +27,5 @@ target_sources(poc-yaml PRIVATE test/poc-yaml.cpp)
 target_link_libraries(poc-yaml PRIVATE oto)
 
 add_test(NAME poc-yaml-create COMMAND poc-yaml)
-add_test(NAME poc-yaml-compare COMMAND ${CMAKE_COMMAND} -E compare_files ${CMAKE_CURRENT_SOURCE_DIR}/test/yaml_dump.expected poc.yaml)
+add_test(NAME poc-yaml-compare COMMAND ${CMAKE_COMMAND} -E compare_files ${CMAKE_CURRENT_SOURCE_DIR}/test/poc.yaml poc.yaml)
 set_tests_properties(poc-yaml-compare PROPERTIES DEPENDS poc-yaml-create)
