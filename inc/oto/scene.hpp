@@ -41,4 +41,19 @@ namespace oto {
   constexpr auto null_cast(typename D::side /*unused*/) {
     return std::nullopt;
   };
+
+  template<domain D>
+  struct transition;
+
+  template<domain D>
+  struct edge {
+    const char * name;
+    transition<D> next;
+  };
+
+  template<domain D>
+  struct transition {
+    scene_meta<D> from;
+    std::span<const edge<D>> choices;
+  };
 }

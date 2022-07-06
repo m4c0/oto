@@ -2,23 +2,6 @@
 
 #include "poc.scenes.hpp"
 
-namespace oto {
-  template<domain D>
-  struct transition;
-
-  template<domain D>
-  struct edge {
-    const char * name;
-    transition<D> next;
-  };
-
-  template<domain D>
-  struct transition {
-    scene_meta<D> from;
-    std::span<const edge<D>> choices;
-  };
-}
-
 namespace poc {
   using edg = oto::edge<domain>;
   using trn = oto::transition<domain>;
