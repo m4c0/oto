@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.23)
 project(oto VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+enable_testing()
 
 include(FetchContent)
 FetchContent_Declare(
@@ -20,3 +21,11 @@ target_link_libraries(oto PUBLIC casein-sdl)
 add_executable(poc MACOSX_BUNDLE WIN32)
 target_sources(poc PRIVATE test/poc.cpp)
 target_link_libraries(poc PRIVATE oto)
+
+add_executable(poc-yaml)
+target_sources(poc-yaml PRIVATE test/poc-yaml.cpp)
+target_link_libraries(poc-yaml PRIVATE oto)
+
+add_test(NAME poc-yaml-create COMMAND poc-yaml)
+add_test(NAME poc-yaml-compare COMMAND ${CMAKE_COMMAND} -E compare_files ${CMAKE_CURRENT_SOURCE_DIR}/test/yaml_dump.expected poc.yaml)
+set_tests_properties(poc-yaml-compare PROPERTIES DEPENDS poc-yaml-create)

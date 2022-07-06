@@ -47,4 +47,6 @@ namespace poc {
     .from = title_meta,
     .choices = title_choices,
   };
+
+  static constexpr const auto game = title;
 }

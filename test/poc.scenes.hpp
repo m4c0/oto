@@ -93,6 +93,7 @@ namespace poc {
     lin { domain::midly_hot, "I'm as hot as an idol" },
   };
   static constexpr const auto intro_meta = restaurant_meta(scm {
+      .name = "Intro",
       .cast = [](domain::actor a) -> osd {
         switch (a) {
         case domain::lefty:

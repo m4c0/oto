@@ -10,8 +10,8 @@ background: restaurant
 music: romance-1
 actors:
   lefty: left
-  midly-hot: middle
   midly: middle
+  midly-hot: middle
   righty: right
 script:
   - [lefty] Hello! How are you doing?
