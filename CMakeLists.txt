@@ -13,10 +13,13 @@ FetchContent_MakeAvailable(casein)
 
 find_package(SDL2 REQUIRED)
 
+add_library(oto-headers INTERFACE)
+target_compile_features(oto-headers INTERFACE cxx_std_20)
+target_include_directories(oto-headers INTERFACE inc)
+
 add_library(oto STATIC)
-target_include_directories(oto PUBLIC inc)
 target_sources(oto PRIVATE src/main.cpp src/sdl.cpp)
-target_link_libraries(oto PUBLIC casein-sdl)
+target_link_libraries(oto PUBLIC casein-sdl oto-headers)
 
 add_executable(poc MACOSX_BUNDLE WIN32)
 target_sources(poc PRIVATE test/poc.cpp)
@@ -25,7 +28,7 @@ target_link_libraries(poc PRIVATE oto)
 function(dumper NAME)
   add_executable(poc-${NAME})
   target_sources(poc-${NAME} PRIVATE test/poc-${NAME}.cpp)
-  target_link_libraries(poc-${NAME} PRIVATE oto)
+  target_link_libraries(poc-${NAME} PRIVATE oto-headers)
 
   add_test(NAME poc-${NAME}-create COMMAND poc-${NAME})
   add_test(NAME poc-${NAME}-compare COMMAND ${CMAKE_COMMAND} -E compare_files --ignore-eol ${CMAKE_CURRENT_SOURCE_DIR}/test/poc-${NAME}.yaml poc-${NAME}.yaml)
