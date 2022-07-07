@@ -3,6 +3,7 @@
 #include "oto/dumper.hpp"
 #include "oto/scene.hpp"
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -149,7 +150,9 @@ namespace poc {
 namespace poc {
   template<template<typename> typename T>
   int tool(const std::string & pname) {
-    std::string fname = pname + ".yaml";
+    std::filesystem::path fname { pname };
+    fname.replace_extension("yaml");
+
     std::ofstream out { fname, std::ios::trunc };
     if (!out) {
       std::cerr << "ERROR: failed to open file - " << fname << "\n";

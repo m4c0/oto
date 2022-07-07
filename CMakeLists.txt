@@ -8,7 +8,7 @@ include(FetchContent)
 FetchContent_Declare(
   casein
   GIT_REPOSITORY git@github.com:m4c0/casein
-  GIT_TAG 2cc36b83d7a9b0b355778f892eaa078811fedf62)
+  GIT_TAG e32fa538971966f3f9bcab9ea19b434e48a9d649)
 FetchContent_MakeAvailable(casein)
 
 find_package(SDL2 REQUIRED)
@@ -28,7 +28,7 @@ function(dumper NAME)
   target_link_libraries(poc-${NAME} PRIVATE oto)
 
   add_test(NAME poc-${NAME}-create COMMAND poc-${NAME})
-  add_test(NAME poc-${NAME}-compare COMMAND ${CMAKE_COMMAND} -E compare_files ${CMAKE_CURRENT_SOURCE_DIR}/test/poc-${NAME}.yaml poc-${NAME}.yaml)
+  add_test(NAME poc-${NAME}-compare COMMAND ${CMAKE_COMMAND} -E compare_files --ignore-eol ${CMAKE_CURRENT_SOURCE_DIR}/test/poc-${NAME}.yaml poc-${NAME}.yaml)
   set_tests_properties(poc-${NAME}-compare PROPERTIES DEPENDS poc-${NAME}-create)
 endfunction()
 
