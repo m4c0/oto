@@ -6,12 +6,12 @@
 #include <variant>
 
 namespace oto::opcodes {
-  template<domain D, typename Arg>
+  template<typename Arg>
   class one_arg_opcode {
     Arg m_arg;
 
   public:
-    explicit constexpr one_arg_opcode(Arg a) : m_arg(a) {
+    explicit constexpr one_arg_opcode(Arg arg) : m_arg(arg) {
     }
 
     [[nodiscard]] Arg operator*() const noexcept {
@@ -20,11 +20,11 @@ namespace oto::opcodes {
   };
 
   template<domain D>
-  using background = one_arg_opcode<D, typename D::background>;
+  using background = one_arg_opcode<typename D::background>;
   template<domain D>
   using choose = choices<D>;
   template<domain D>
-  using music = one_arg_opcode<D, typename D::music>;
+  using music = one_arg_opcode<typename D::music>;
   struct pause {};
   struct present {};
   template<domain D>
