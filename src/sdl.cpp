@@ -28,8 +28,8 @@ oto::sdl::sdl(void * handle) : renderer { renderer = static_cast<SDL_Renderer *>
 
 void oto::sdl::repaint() {
   static constexpr const auto FULL_BRIGHT = 255;
-  const auto r = SDL_GetTicks() % FULL_BRIGHT;
-  SDL_SetRenderDrawColor(renderer, r, 0, FULL_BRIGHT, FULL_BRIGHT);
+  SDL_SetRenderDrawColor(renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);
   SDL_RenderClear(renderer);
+  //
   SDL_RenderPresent(renderer);
 }
