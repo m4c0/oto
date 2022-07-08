@@ -1,7 +1,6 @@
-#include "sdl.hpp"
+#include "oto/engine.hpp"
 
 #include <SDL.h>
-#include <memory>
 #include <stdexcept>
 
 static void init_audio() {
@@ -22,14 +21,14 @@ static void init_audio() {
   SDL_PauseAudioDevice(dev, 0);
 }
 
-oto::sdl::sdl(void * handle) : renderer { renderer = static_cast<SDL_Renderer *>(handle) } {
+oto::v_engine::v_engine(void * rnd) : m_renderer(static_cast<SDL_Renderer *>(rnd)) {
   init_audio();
 }
 
-void oto::sdl::repaint() {
+void oto::v_engine::repaint() {
   static constexpr const auto FULL_BRIGHT = 255;
-  SDL_SetRenderDrawColor(renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);
-  SDL_RenderClear(renderer);
+  SDL_SetRenderDrawColor(m_renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);
+  SDL_RenderClear(m_renderer);
   //
-  SDL_RenderPresent(renderer);
+  SDL_RenderPresent(m_renderer);
 }
