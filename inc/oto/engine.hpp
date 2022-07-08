@@ -9,6 +9,8 @@ struct SDL_Texture;
 namespace oto {
   class v_engine {
     SDL_Renderer * m_renderer;
+    SDL_Texture * m_background {};
+    int m_timer {};
 
   protected:
     explicit v_engine(void * rnd);
@@ -19,16 +21,14 @@ namespace oto {
     v_engine & operator=(const v_engine &) = default;
 
   public:
-    virtual ~v_engine() = default;
+    virtual ~v_engine();
 
     void repaint();
   };
 
   template<domain D>
   class engine : public v_engine {
-    SDL_Texture * m_background {};
     vm<D> m_vm {};
-    int m_timer {};
 
   public:
     explicit engine(void * rnd) : v_engine(rnd) {
