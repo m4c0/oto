@@ -48,7 +48,8 @@ namespace oto {
 
   template<domain D>
   class vm {
-    static_assert(std::is_trivially_copy_assignable<opcode<D>>() && sizeof(opcode<D>) < 32);
+    static constexpr const auto max_opcode_size = 32;
+    static_assert(std::is_trivially_copy_assignable<opcode<D>>() && sizeof(opcode<D>) < max_opcode_size);
 
     enum state { bg, m, scr, n };
 
@@ -59,7 +60,7 @@ namespace oto {
   public:
     explicit constexpr vm() = default;
 
-    explicit constexpr vm(const transition<D> * t) : m_t(t) {
+    explicit constexpr vm(const transition<D> * trn) : m_t(trn) {
     }
 
     [[nodiscard]] constexpr explicit operator bool() const noexcept {
@@ -67,26 +68,26 @@ namespace oto {
     }
 
     [[nodiscard]] constexpr opcode<D> iterate() {
-      const auto & s = m_t->from;
+      const auto & scn = m_t->from;
       switch (m_state) {
       case bg:
-        if (s.background) {
+        if (scn.background) {
           m_state = m;
-          return opcodes::background<D> { *s.background };
+          return opcodes::background<D> { *scn.background };
         }
       case m:
         if (m_t->from.music) {
           m_state = scr;
           m_n = 0;
-          return opcodes::music<D> { *s.music };
+          return opcodes::music<D> { *scn.music };
         }
       case scr:
-        if (m_n < s.script.size()) {
-          auto & l = s.script[m_n++];
+        if (m_n < scn.script.size()) {
+          auto & lin = scn.script[m_n++];
           return opcodes::speak<D> {
-            .side = *s.cast(l.actor),
-            .actor = l.actor,
-            .text = l.text,
+            .side = *scn.cast(lin.actor),
+            .actor = lin.actor,
+            .text = lin.text,
           };
         }
       default:
@@ -105,9 +106,9 @@ namespace oto {
           return opcodes::pause {};
         }
         default:
-          auto c = m_t->choices;
+          auto cho = m_t->choices;
           m_t = nullptr;
-          return c;
+          return cho;
         }
         return {};
       }
