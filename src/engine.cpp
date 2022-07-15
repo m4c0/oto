@@ -25,10 +25,6 @@ oto::v_engine::v_engine(void * rnd) : m_renderer(static_cast<SDL_Renderer *>(rnd
   init_audio();
 }
 
-oto::v_engine::~v_engine() {
-  SDL_DestroyTexture(m_background);
-}
-
 void oto::v_engine::repaint() {
   static constexpr const auto FULL_BRIGHT = 255;
   SDL_SetRenderDrawColor(m_renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);

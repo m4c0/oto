@@ -21,7 +21,7 @@ namespace oto {
     v_engine & operator=(const v_engine &) = default;
 
   public:
-    virtual ~v_engine();
+    virtual ~v_engine() = default;
 
     void repaint();
   };
