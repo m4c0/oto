@@ -5,7 +5,6 @@
 #include <memory>
 
 void casein_sdl_event(const casein::event & evt) {
-  static oto::frame_state frame_state;
   static std::unique_ptr<oto::v_engine> eng;
 
   switch (evt.type()) {
@@ -15,8 +14,7 @@ void casein_sdl_event(const casein::event & evt) {
     break;
   }
   case casein::REPAINT:
-    if (eng) eng->repaint();
-    frame_state = {};
+    if (eng) eng->run_frame();
     break;
   default:
     break;
