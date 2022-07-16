@@ -9,8 +9,11 @@
 namespace oto {
   template<domain D, assets<D> A>
   class engine : public v_engine {
+    enum state { run, pause };
+
     texture m_background {};
     int m_timer {};
+    state m_state = run;
 
     vm<D> m_vm;
 
@@ -18,24 +21,33 @@ namespace oto {
     explicit engine(const transition<D> * init) : m_vm(init) {
     }
 
-    void operator()(const opcodes::background<D> & bck) {
+    state operator()(const opcodes::background<D> & bck) {
       m_background = A::load_background(*bck);
+      return run;
     }
-    void operator()(const opcodes::choose<D> & /**/) {
+    state operator()(const opcodes::choose<D> & /**/) {
+      return pause;
     }
-    void operator()(const opcodes::music<D> & /**/) {
+    state operator()(const opcodes::music<D> & /**/) {
+      return run;
     }
-    void operator()(const opcodes::pause & /**/) {
+    state operator()(const opcodes::pause & /**/) {
+      return pause;
     }
-    void operator()(const opcodes::present & /**/) {
+    state operator()(const opcodes::present & /**/) {
+      return pause;
     }
-    void operator()(const opcodes::speak<D> & /**/) {
+    state operator()(const opcodes::speak<D> & /**/) {
+      return pause;
     }
-    void operator()(std::monostate /**/) {
+    state operator()(std::monostate /**/) {
+      return pause;
     }
 
     void run_frame() override {
-      if (m_vm) std::visit(*this, m_vm.iterate());
+      while (m_vm && m_state == run) {
+        m_state = std::visit(*this, m_vm.iterate());
+      }
 
       oto::r::prepare();
       if (m_background) oto::r::draw(m_background);
