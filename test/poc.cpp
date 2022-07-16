@@ -14,15 +14,15 @@ static constexpr const auto bg_color(poc::domain::background bck) {
 
 class poc_engine : public oto::engine<poc::domain> {
 protected:
-  SDL_Surface * load_background(poc::domain::background bck) override {
-    return create_color_surface(128, 128, bg_color(bck));
+  oto::texture load_background(poc::domain::background bck) override {
+    return renderer()->create_color_texture(128, 128, bg_color(bck));
   }
 
 public:
-  explicit poc_engine(void * rnd) : engine(rnd, &poc::game) {
+  explicit poc_engine(oto::renderer * rnd) : engine(rnd, &poc::game) {
   }
 };
 
-oto::v_engine * oto::create_instance(void * rnd) {
+oto::v_engine * oto::create_engine(oto::renderer * rnd) {
   return new poc_engine(rnd);
 }

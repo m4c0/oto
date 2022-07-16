@@ -1,4 +1,4 @@
-#include "oto/engine.hpp"
+#include "renderer.hpp"
 
 #include <SDL.h>
 #include <stdexcept>
@@ -21,32 +21,38 @@ static void init_audio() {
   SDL_PauseAudioDevice(dev, 0);
 }
 
-oto::v_engine::v_engine(void * rnd) : m_renderer(static_cast<SDL_Renderer *>(rnd)) {
+oto::sdl_renderer::sdl_renderer(void * rnd) : m_renderer(static_cast<SDL_Renderer *>(rnd)) {
   init_audio();
 }
 
-void oto::v_engine::paint() {
+void oto::sdl_renderer::prepare() {
   static constexpr const auto FULL_BRIGHT = 255;
   SDL_SetRenderDrawColor(m_renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);
   SDL_RenderClear(m_renderer);
+}
 
-  SDL_RenderCopy(m_renderer, m_background, nullptr, nullptr);
-
+void oto::sdl_renderer::present() {
   SDL_RenderPresent(m_renderer);
 }
 
-void oto::v_engine::set_background(SDL_Surface * bkg) {
-  SDL_DestroyTexture(m_background);
-  m_background = SDL_CreateTextureFromSurface(m_renderer, bkg);
-  SDL_FreeSurface(bkg);
-}
-
-SDL_Surface * oto::v_engine::create_color_surface(int width, int height, int rgb) const {
+oto::texture oto::sdl_renderer::create_color_texture(int width, int height, int rgb) const {
   static constexpr const auto bits_per_pixel = 24;
   static constexpr const auto pixel_format = SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGB888;
   SDL_Surface * surf = SDL_CreateRGBSurfaceWithFormat(0, width, height, bits_per_pixel, pixel_format);
 
   SDL_Rect rect { 0, 0, width, height };
   SDL_FillRect(surf, &rect, rgb);
-  return surf;
+
+  SDL_Texture * txt = SDL_CreateTextureFromSurface(m_renderer, surf);
+  SDL_FreeSurface(surf);
+
+  return oto::texture(reinterpret_cast<texture_ptr *>(txt));
+}
+
+void oto::sdl_renderer::draw(const texture & txt) {
+  SDL_RenderCopy(m_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), nullptr, nullptr);
+}
+
+void oto::r_deleter::operator()(texture_ptr * txt) const {
+  SDL_DestroyTexture(reinterpret_cast<SDL_Texture *>(txt));
 }

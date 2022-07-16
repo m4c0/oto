@@ -18,7 +18,7 @@ target_compile_features(oto-headers INTERFACE cxx_std_20)
 target_include_directories(oto-headers INTERFACE inc)
 
 add_library(oto STATIC)
-target_sources(oto PRIVATE src/engine.cpp src/main.cpp)
+target_sources(oto PRIVATE src/main.cpp src/renderer.cpp)
 target_link_libraries(oto PUBLIC casein-sdl oto-headers)
 
 add_executable(poc MACOSX_BUNDLE WIN32)
