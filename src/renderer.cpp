@@ -1,7 +1,10 @@
+#include "oto/renderer.hpp"
 #include "renderer.hpp"
 
 #include <SDL.h>
 #include <stdexcept>
+
+SDL_Renderer * g_renderer = nullptr;
 
 static void init_audio() {
   if (SDL_Init(SDL_INIT_AUDIO) != 0) {
@@ -21,21 +24,23 @@ static void init_audio() {
   SDL_PauseAudioDevice(dev, 0);
 }
 
-oto::sdl_renderer::sdl_renderer(void * rnd) : m_renderer(static_cast<SDL_Renderer *>(rnd)) {
+void oto::r::init(void * hnd) {
+  g_renderer = static_cast<SDL_Renderer *>(hnd);
+
   init_audio();
 }
 
-void oto::sdl_renderer::prepare() {
+void oto::r::prepare() {
   static constexpr const auto FULL_BRIGHT = 255;
-  SDL_SetRenderDrawColor(m_renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);
-  SDL_RenderClear(m_renderer);
+  SDL_SetRenderDrawColor(g_renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);
+  SDL_RenderClear(g_renderer);
 }
 
-void oto::sdl_renderer::present() {
-  SDL_RenderPresent(m_renderer);
+void oto::r::present() {
+  SDL_RenderPresent(g_renderer);
 }
 
-oto::texture oto::sdl_renderer::create_color_texture(int width, int height, int rgb) const {
+oto::texture oto::r::create_color_texture(int width, int height, int rgb) {
   static constexpr const auto bits_per_pixel = 24;
   static constexpr const auto pixel_format = SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGB888;
   SDL_Surface * surf = SDL_CreateRGBSurfaceWithFormat(0, width, height, bits_per_pixel, pixel_format);
@@ -43,16 +48,16 @@ oto::texture oto::sdl_renderer::create_color_texture(int width, int height, int 
   SDL_Rect rect { 0, 0, width, height };
   SDL_FillRect(surf, &rect, rgb);
 
-  SDL_Texture * txt = SDL_CreateTextureFromSurface(m_renderer, surf);
+  SDL_Texture * txt = SDL_CreateTextureFromSurface(g_renderer, surf);
   SDL_FreeSurface(surf);
 
-  return oto::texture(reinterpret_cast<texture_ptr *>(txt));
+  return oto::texture(reinterpret_cast<oto::r::texture *>(txt));
 }
 
-void oto::sdl_renderer::draw(const texture & txt) {
-  SDL_RenderCopy(m_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), nullptr, nullptr);
+void oto::r::draw(const oto::texture & txt) {
+  SDL_RenderCopy(g_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), nullptr, nullptr);
 }
 
-void oto::r_deleter::operator()(texture_ptr * txt) const {
+void oto::r::deleter::operator()(oto::r::texture * txt) const {
   SDL_DestroyTexture(reinterpret_cast<SDL_Texture *>(txt));
 }

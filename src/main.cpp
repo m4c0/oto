@@ -7,15 +7,12 @@
 
 void casein_sdl_event(const casein::event & evt) {
   static std::unique_ptr<oto::v_engine> eng;
-  static std::unique_ptr<oto::sdl_renderer> rnd;
 
   switch (evt.type()) {
-  case casein::CREATE_WINDOW: {
-    void * hnd = evt.as<casein::events::create_window>().native_window_handle();
-    rnd = std::make_unique<oto::sdl_renderer>(hnd);
-    eng.reset(oto::create_engine(rnd.get()));
+  case casein::CREATE_WINDOW:
+    oto::r::init(evt.as<casein::events::create_window>().native_window_handle());
+    eng.reset(oto::create_engine());
     break;
-  }
   case casein::REPAINT:
     if (eng) eng->run_frame();
     break;
