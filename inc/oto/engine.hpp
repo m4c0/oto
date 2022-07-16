@@ -1,27 +1,25 @@
 #pragma once
 
+#include "oto/assets.hpp"
 #include "oto/renderer.hpp"
 #include "oto/scene.hpp"
 #include "oto/v_engine.hpp"
 #include "oto/vm.hpp"
 
 namespace oto {
-  template<domain D>
+  template<domain D, assets<D> A>
   class engine : public v_engine {
     texture m_background {};
     int m_timer {};
 
     vm<D> m_vm;
 
-  protected:
-    virtual texture load_background(typename D::background bck) = 0;
-
   public:
     explicit engine(const transition<D> * init) : m_vm(init) {
     }
 
     void operator()(const opcodes::background<D> & bck) {
-      m_background = load_background(*bck);
+      m_background = A::load_background(*bck);
     }
     void operator()(const opcodes::choose<D> & /**/) {
     }

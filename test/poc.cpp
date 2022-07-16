@@ -11,18 +11,12 @@ static constexpr const auto bg_color(poc::domain::background bck) {
     return 0x77000000;
   }
 }
-
-class poc_engine : public oto::engine<poc::domain> {
-protected:
-  oto::texture load_background(poc::domain::background bck) override {
+struct asset {
+  static oto::texture load_background(poc::domain::background bck) {
     return oto::r::create_color_texture(128, 128, bg_color(bck));
-  }
-
-public:
-  explicit poc_engine() : engine(&poc::game) {
   }
 };
 
 oto::v_engine * oto::create_engine() {
-  return new poc_engine();
+  return new oto::engine<poc::domain, asset>(&poc::game);
 }
