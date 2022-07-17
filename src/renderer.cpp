@@ -2,9 +2,18 @@
 #include "renderer.hpp"
 
 #include <SDL.h>
+#include <span>
 #include <stdexcept>
 
 SDL_Renderer * g_renderer = nullptr;
+void (*g_audio_callback)(std::span<float>) = [](auto data) {
+  std::fill(data.begin(), data.end(), 0);
+};
+
+static void audio_callback(void * /*user*/, Uint8 * str, int len) {
+  float * fptr = reinterpret_cast<float *>(str);
+  g_audio_callback(std::span(fptr, len));
+}
 
 static void init_audio() {
   if (SDL_Init(SDL_INIT_AUDIO) != 0) {
@@ -16,7 +25,7 @@ static void init_audio() {
     .format = AUDIO_F32,
     .channels = 1,
     .samples = 4096,
-    //.callback = audio_callback,
+    .callback = audio_callback,
   };
   SDL_AudioSpec obtained;
   auto dev = SDL_OpenAudioDevice(nullptr, 0, &desired, &obtained, 0);

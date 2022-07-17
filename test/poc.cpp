@@ -1,6 +1,9 @@
 #include "oto/engine.hpp"
 #include "poc.hpp"
 
+static void music_callback(std::span<float> /**/) {
+}
+
 static constexpr const auto bg_color(poc::domain::background bck) {
   switch (bck) {
   case poc::domain::title:
@@ -16,8 +19,7 @@ struct asset {
     return oto::r::create_color_texture(128, 128, bg_color(bck));
   }
   static auto load_music(poc::domain::music bck) {
-    return [](std::span<float> data) {
-    };
+    return music_callback;
   }
 };
 
