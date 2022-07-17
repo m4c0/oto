@@ -67,6 +67,10 @@ void oto::r::draw(const oto::texture & txt) {
   SDL_RenderCopy(g_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), nullptr, nullptr);
 }
 
+void oto::r::set_audio_callback(audio_callback_t cbk) {
+  g_audio_callback = cbk;
+}
+
 void oto::r::deleter::operator()(oto::r::texture * txt) const {
   SDL_DestroyTexture(reinterpret_cast<SDL_Texture *>(txt));
 }
