@@ -9,8 +9,9 @@
 namespace oto {
   template<domain D, assets<D> A>
   class engine : public v_engine {
-    enum state { run, pause, sleep };
+    enum state { run, pause, sleep, speak };
 
+    texture m_actor {};
     texture m_background {};
     std::chrono::time_point<clock> m_timer {};
     state m_state = run;
@@ -21,10 +22,10 @@ namespace oto {
       switch (m_state) {
       case run:
         return m_vm ? std::visit(*this, m_vm.iterate()) : pause;
-      case pause:
-        return pause;
       case sleep:
         return (clock::now() > m_timer) ? run : sleep;
+      default:
+        return m_state;
       }
     }
 
@@ -52,14 +53,19 @@ namespace oto {
       return sleep;
     }
     state operator()(const opcodes::speak<D> & spk) {
-      return pause;
+      m_actor = A::load_actor(spk.actor);
+      return speak;
     }
     state operator()(std::monostate /**/) {
       return pause;
     }
 
     void key_down() override {
-      if (m_state == pause) m_state = run;
+      if (m_state == pause) {
+        m_state = run;
+        m_actor.reset();
+      }
+      if (m_state == speak) m_state = run;
     }
 
     void run_frame() override {
@@ -69,6 +75,7 @@ namespace oto {
 
       oto::r::prepare();
       if (m_background) oto::r::draw(m_background);
+      if (m_actor) oto::r::draw(m_actor);
       oto::r::present();
     }
   };

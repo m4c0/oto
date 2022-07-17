@@ -50,7 +50,7 @@ void oto::r::present() {
   SDL_RenderPresent(g_renderer);
 }
 
-oto::texture oto::r::create_color_texture(int width, int height, int rgb) {
+oto::texture oto::r::create_color_texture(int width, int height, unsigned rgb) {
   static constexpr const auto bits_per_pixel = 24;
   static constexpr const auto pixel_format = SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGB888;
   SDL_Surface * surf = SDL_CreateRGBSurfaceWithFormat(0, width, height, bits_per_pixel, pixel_format);
@@ -61,7 +61,7 @@ oto::texture oto::r::create_color_texture(int width, int height, int rgb) {
   SDL_Texture * txt = SDL_CreateTextureFromSurface(g_renderer, surf);
   SDL_FreeSurface(surf);
 
-  return oto::texture(reinterpret_cast<oto::r::texture *>(txt));
+  return oto::texture(reinterpret_cast<oto::r::texture_ptr *>(txt));
 }
 
 void oto::r::draw(const oto::texture & txt) {
@@ -72,6 +72,6 @@ void oto::r::set_audio_callback(audio_callback_t cbk) {
   g_audio_callback = cbk;
 }
 
-void oto::r::deleter::operator()(oto::r::texture * txt) const {
+void oto::r::deleter::operator()(oto::r::texture_ptr * txt) const {
   SDL_DestroyTexture(reinterpret_cast<SDL_Texture *>(txt));
 }
