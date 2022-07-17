@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <memory>
 #include <span>
 
@@ -10,6 +11,7 @@ namespace oto::r {
   };
 }
 namespace oto {
+  using clock = std::chrono::system_clock;
   using texture = std::unique_ptr<r::texture, r::deleter>;
 }
 namespace oto::r {

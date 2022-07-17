@@ -9,13 +9,24 @@
 namespace oto {
   template<domain D, assets<D> A>
   class engine : public v_engine {
-    enum state { run, pause };
+    enum state { run, pause, sleep };
 
     texture m_background {};
-    int m_timer {};
+    std::chrono::time_point<clock> m_timer {};
     state m_state = run;
 
     vm<D> m_vm;
+
+    state step() {
+      switch (m_state) {
+      case run:
+        return m_vm ? std::visit(*this, m_vm.iterate()) : pause;
+      case pause:
+        return pause;
+      case sleep:
+        return (clock::now() > m_timer) ? run : sleep;
+      }
+    }
 
   public:
     explicit engine(const transition<D> * init) : m_vm(init) {
@@ -36,7 +47,9 @@ namespace oto {
       return pause;
     }
     state operator()(const opcodes::present & /**/) {
-      return pause;
+      using namespace std::literals;
+      m_timer = clock::now() + 2s;
+      return sleep;
     }
     state operator()(const opcodes::speak<D> & /**/) {
       return pause;
@@ -46,9 +59,9 @@ namespace oto {
     }
 
     void run_frame() override {
-      while (m_vm && m_state == run) {
-        m_state = std::visit(*this, m_vm.iterate());
-      }
+      do {
+        m_state = step();
+      } while (m_state == run);
 
       oto::r::prepare();
       if (m_background) oto::r::draw(m_background);
