@@ -13,6 +13,9 @@ void casein_sdl_event(const casein::event & evt) {
     oto::r::init(evt.as<casein::events::create_window>().native_window_handle());
     eng.reset(oto::create_engine());
     break;
+  case casein::KEY_DOWN:
+    if (eng) eng->key_down();
+    break;
   case casein::REPAINT:
     if (eng) eng->run_frame();
     break;

@@ -51,11 +51,15 @@ namespace oto {
       m_timer = clock::now() + 2s;
       return sleep;
     }
-    state operator()(const opcodes::speak<D> & /**/) {
+    state operator()(const opcodes::speak<D> & spk) {
       return pause;
     }
     state operator()(std::monostate /**/) {
       return pause;
+    }
+
+    void key_down() override {
+      if (m_state == pause) m_state = run;
     }
 
     void run_frame() override {
