@@ -12,7 +12,7 @@ void (*g_audio_callback)(std::span<float>) = [](auto data) {
 
 static void audio_callback(void * /*user*/, Uint8 * str, int len) {
   float * fptr = reinterpret_cast<float *>(str);
-  g_audio_callback(std::span(fptr, len));
+  g_audio_callback(std::span(fptr, len / sizeof(float)));
 }
 
 static void init_audio() {
@@ -41,6 +41,7 @@ void oto::r::init(void * hnd) {
 
 void oto::r::prepare() {
   static constexpr const auto FULL_BRIGHT = 255;
+
   SDL_SetRenderDrawColor(g_renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);
   SDL_RenderClear(g_renderer);
 }
