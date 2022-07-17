@@ -15,6 +15,10 @@ struct asset {
   static oto::texture load_background(poc::domain::background bck) {
     return oto::r::create_color_texture(128, 128, bg_color(bck));
   }
+  static auto load_music(poc::domain::music bck) {
+    return [](std::span<float> data) {
+    };
+  }
 };
 
 oto::v_engine * oto::create_engine() {

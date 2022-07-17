@@ -28,7 +28,7 @@ namespace oto {
     state operator()(const opcodes::choose<D> & /**/) {
       return pause;
     }
-    state operator()(const opcodes::music<D> & /**/) {
+    state operator()(const opcodes::music<D> & mus) {
       return run;
     }
     state operator()(const opcodes::pause & /**/) {
