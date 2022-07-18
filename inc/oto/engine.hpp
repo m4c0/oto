@@ -73,10 +73,8 @@ namespace oto {
         m_state = step();
       } while (m_state == run);
 
-      oto::r::prepare();
       if (m_background) oto::r::draw(m_background);
       if (m_actor) oto::r::draw(m_actor);
-      oto::r::present();
     }
   };
 }

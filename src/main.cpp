@@ -1,11 +1,11 @@
-#include "casein.sdl.hpp"
+#include "casein.hpp"
 #include "frame_state.hpp"
 #include "oto/v_engine.hpp"
 #include "renderer.hpp"
 
 #include <memory>
 
-void casein_sdl_event(const casein::event & evt) {
+void casein_event(const casein::event & evt) {
   static std::unique_ptr<oto::v_engine> eng;
 
   switch (evt.type()) {

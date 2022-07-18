@@ -39,17 +39,6 @@ void oto::r::init(void * hnd) {
   init_audio();
 }
 
-void oto::r::prepare() {
-  static constexpr const auto FULL_BRIGHT = 255;
-
-  SDL_SetRenderDrawColor(g_renderer, FULL_BRIGHT, 0, FULL_BRIGHT, FULL_BRIGHT);
-  SDL_RenderClear(g_renderer);
-}
-
-void oto::r::present() {
-  SDL_RenderPresent(g_renderer);
-}
-
 oto::texture oto::r::create_color_texture(int width, int height, unsigned rgb) {
   static constexpr const auto bits_per_pixel = 24;
   static constexpr const auto pixel_format = SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGB888;
