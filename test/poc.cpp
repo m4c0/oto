@@ -36,14 +36,22 @@ struct asset {
   static auto load_music(poc::domain::music bck) {
     return music_callback;
   }
+  static oto::texture load_text_background(poc::domain::background bck) {
+    switch (bck) {
+    case poc::domain::restaurant:
+      return oto::r::create_color_texture(128, 128, 0);
+    default:
+      return nullptr;
+    }
+  }
   static auto rect_of_side(poc::domain::side side) {
     switch (side) {
     case poc::domain::left:
-      return oto::rect { 160, 200, 160, 400 };
+      return oto::rect { 160, 100, 160, 400 };
     case poc::domain::middle:
-      return oto::rect { 320, 200, 160, 400 };
+      return oto::rect { 320, 100, 160, 400 };
     case poc::domain::right:
-      return oto::rect { 480, 200, 160, 400 };
+      return oto::rect { 480, 100, 160, 400 };
     }
   }
 };

@@ -14,6 +14,7 @@ namespace oto {
     texture m_actor {};
     rect m_actor_rect {};
     texture m_background {};
+    texture m_text_background {};
     std::chrono::time_point<clock> m_timer {};
     state m_state = run;
 
@@ -36,6 +37,7 @@ namespace oto {
 
     state operator()(const opcodes::background<D> & bck) {
       m_background = A::load_background(*bck);
+      m_text_background = A::load_text_background(*bck);
       return run;
     }
     state operator()(const opcodes::choose<D> & /**/) {
@@ -71,12 +73,15 @@ namespace oto {
     }
 
     void run_frame() override {
+      static constexpr const rect text_bg_rect = { .x = 0, .y = 400, .w = 800, .h = 200 };
+
       do {
         m_state = step();
       } while (m_state == run);
 
       if (m_background) oto::r::draw(m_background);
       if (m_actor) oto::r::draw(m_actor, m_actor_rect);
+      if (m_text_background) oto::r::draw(m_text_background, text_bg_rect);
     }
   };
 }
