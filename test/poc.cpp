@@ -36,6 +36,16 @@ struct asset {
   static auto load_music(poc::domain::music bck) {
     return music_callback;
   }
+  static auto rect_of_side(poc::domain::side side) {
+    switch (side) {
+    case poc::domain::left:
+      return oto::rect { 0, 0, 100, 100 };
+    case poc::domain::middle:
+      return oto::rect { 100, 100, 100, 100 };
+    case poc::domain::right:
+      return oto::rect { 200, 200, 100, 100 };
+    }
+  }
 };
 
 oto::v_engine * oto::create_engine() {

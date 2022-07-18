@@ -12,6 +12,7 @@ namespace oto {
     enum state { run, pause, sleep, speak };
 
     texture m_actor {};
+    rect m_actor_rect {};
     texture m_background {};
     std::chrono::time_point<clock> m_timer {};
     state m_state = run;
@@ -54,6 +55,7 @@ namespace oto {
     }
     state operator()(const opcodes::speak<D> & spk) {
       m_actor = A::load_actor(spk.actor);
+      m_actor_rect = A::rect_of_side(spk.side);
       return speak;
     }
     state operator()(std::monostate /**/) {
@@ -74,7 +76,7 @@ namespace oto {
       } while (m_state == run);
 
       if (m_background) oto::r::draw(m_background);
-      if (m_actor) oto::r::draw(m_actor);
+      if (m_actor) oto::r::draw(m_actor, m_actor_rect);
     }
   };
 }

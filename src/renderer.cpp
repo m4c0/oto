@@ -56,6 +56,15 @@ oto::texture oto::r::create_color_texture(int width, int height, unsigned rgb) {
 void oto::r::draw(const oto::texture & txt) {
   SDL_RenderCopy(g_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), nullptr, nullptr);
 }
+void oto::r::draw(const oto::texture & txt, const oto::rect & rect) {
+  SDL_Rect sdl_rect = {
+    .x = rect.x,
+    .y = rect.y,
+    .w = rect.w,
+    .h = rect.h,
+  };
+  SDL_RenderCopy(g_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), nullptr, &sdl_rect);
+}
 
 void oto::r::set_audio_callback(audio_callback_t cbk) {
   g_audio_callback = cbk;
