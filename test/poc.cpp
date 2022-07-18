@@ -39,11 +39,11 @@ struct asset {
   static auto rect_of_side(poc::domain::side side) {
     switch (side) {
     case poc::domain::left:
-      return oto::rect { 0, 0, 100, 100 };
+      return oto::rect { 160, 200, 160, 400 };
     case poc::domain::middle:
-      return oto::rect { 100, 100, 100, 100 };
+      return oto::rect { 320, 200, 160, 400 };
     case poc::domain::right:
-      return oto::rect { 200, 200, 100, 100 };
+      return oto::rect { 480, 200, 160, 400 };
     }
   }
 };
