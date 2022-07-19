@@ -28,4 +28,5 @@ namespace oto::r {
   void set_audio_callback(audio_callback_t cbk);
 
   [[nodiscard]] oto::texture create_color_texture(int width, int height, unsigned rgb);
+  [[nodiscard]] oto::texture create_rgba_texture(int width, int height, std::span<const unsigned> data);
 }

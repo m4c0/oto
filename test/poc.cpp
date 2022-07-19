@@ -1,4 +1,5 @@
 #include "oto/engine.hpp"
+#include "poc.font.hpp"
 #include "poc.hpp"
 
 static constexpr const auto HALF_VALUE = 128;
@@ -43,6 +44,12 @@ struct asset {
       return oto::r::create_color_texture(HALF_VALUE, HALF_VALUE, 0);
     }
     return nullptr;
+  }
+  static oto::texture load_text_font(poc::domain::background /**/) {
+    return oto::r::create_rgba_texture(
+        poc::font::xmap_stride,
+        poc::font::xmap_rows,
+        std::span<const unsigned> { poc::font::xmap });
   }
   static auto rect_of_side(poc::domain::side side) {
     static constexpr const auto ACTOR_H = 400;
