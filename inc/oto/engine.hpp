@@ -15,6 +15,7 @@ namespace oto {
     rect m_actor_rect {};
     texture m_background {};
     texture m_text_background {};
+    texture m_text_font {};
     std::chrono::time_point<clock> m_timer {};
     state m_state = run;
 
@@ -38,6 +39,7 @@ namespace oto {
     state operator()(const opcodes::background<D> & bck) {
       m_background = A::load_background(*bck);
       m_text_background = A::load_text_background(*bck);
+      m_text_font = A::load_text_font(*bck);
       return run;
     }
     state operator()(const opcodes::choose<D> & /**/) {
