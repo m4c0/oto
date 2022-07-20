@@ -4,12 +4,6 @@ module P = Pegasus.M (struct
   let width = 800
   let height = 600
 
-  let load_background (bg : D.background) =
-    let rgb =
-      match bg with Title -> 0xFF00 | Restaurant -> 0xFF0000 | End -> 0xFF
-    in
-    Pegasus.Cindel.create_color_surface ~width ~height ~rgb
-
   let load_music (mus : D.music) =
     let mult = match mus with Romance -> 1. | GameOver -> 2. in
     let music_ref = ref 0.0 in
