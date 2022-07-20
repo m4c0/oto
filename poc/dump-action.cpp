@@ -1,6 +1,5 @@
+#include "dumper.hpp"
 #include "oto/dumper.action.hpp"
-#include "oto/scene.hpp"
-#include "poc.hpp"
 
 template<typename D>
 struct dumper : public oto::dumper::action<D> {

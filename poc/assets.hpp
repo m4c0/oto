@@ -1,7 +1,8 @@
 #pragma once
 
-#include "poc.font.hpp"
-#include "poc.hpp"
+#include "font.hpp"
+#include "main.hpp"
+#include "oto/renderer.hpp"
 
 static constexpr const auto HALF_VALUE = 128;
 

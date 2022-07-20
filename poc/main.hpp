@@ -1,12 +1,6 @@
 #pragma once
 
-#include "oto/dumper.hpp"
 #include "oto/scene.hpp"
-
-#include <filesystem>
-#include <fstream>
-#include <iostream>
-#include <string>
 
 namespace poc {
   struct domain {
@@ -145,19 +139,4 @@ namespace poc {
   };
 
   static constexpr const auto game = title;
-}
-
-namespace poc {
-  template<template<typename> typename T>
-  int tool(const std::string & pname) {
-    std::filesystem::path fname { pname };
-    fname.replace_extension("yaml");
-
-    std::ofstream out { fname, std::ios::trunc };
-    if (!out) {
-      std::cerr << "ERROR: failed to open file - " << fname << "\n";
-      return 1;
-    }
-    return oto::dumper::dump<T>(out, poc::game);
-  }
 }
