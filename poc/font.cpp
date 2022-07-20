@@ -9,10 +9,28 @@ static constexpr const auto char_rows = 5;
 static constexpr const auto chars = [] {
   std::array<std::string_view, max_chars> ascii {};
 
+  ascii['d'] = "XX  "
+               "X X "
+               "X X "
+               "X X "
+               "XX  ";
+
   ascii['e'] = "XXX "
                "X   "
                "XXX "
                "X   "
+               "XXX ";
+
+  ascii['f'] = "XXX "
+               "X   "
+               "XXX "
+               "X   "
+               "X   ";
+
+  ascii['g'] = "XXX "
+               "X   "
+               "X X "
+               "X X "
                "XXX ";
 
   ascii['h'] = "X X "
@@ -21,17 +39,47 @@ static constexpr const auto chars = [] {
                "X X "
                "X X ";
 
+  ascii['i'] = "XXX "
+               " X  "
+               " X  "
+               " X  "
+               "XXX ";
+
   ascii['l'] = "X   "
                "X   "
                "X   "
                "X   "
                "XXX ";
 
+  ascii['m'] = "XXX "
+               "XXX "
+               "X X "
+               "X X "
+               "X X ";
+
   ascii['o'] = "XXX "
                "X X "
                "X X "
                "X X "
                "XXX ";
+
+  ascii['r'] = "XX  "
+               "X X "
+               "XXX "
+               "XX  "
+               "X X ";
+
+  ascii['t'] = "XXX "
+               " X  "
+               " X  "
+               " X  "
+               " X  ";
+
+  ascii['y'] = "X X "
+               "X X "
+               " X  "
+               " X  "
+               " X  ";
 
   for (auto c = 'a', d = 'A'; c <= 'z'; c++, d++) {
     ascii.at(d) = ascii.at(c);
