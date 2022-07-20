@@ -48,10 +48,7 @@ struct asset {
     return nullptr;
   }
   static oto::texture load_text_font(poc::domain::background /**/) {
-    return oto::r::create_rgba_texture(
-        poc::font::xmap_stride,
-        poc::font::xmap_rows,
-        std::span<const unsigned> { poc::font::xmap });
+    return poc::load_text_font();
   }
   static auto rect_of_side(poc::domain::side side) {
     static constexpr const auto ACTOR_H = 400;
@@ -68,6 +65,6 @@ struct asset {
     }
   }
   static auto size_of_font(poc::domain::background /**/) {
-    return oto::size { .w = 4, .h = 8 };
+    return oto::size { .w = 16, .h = 32 };
   }
 };

@@ -18,6 +18,6 @@ dumper(assets)
 dumper(yaml)
 
 add_executable(poc MACOSX_BUNDLE WIN32)
-target_sources(poc PRIVATE main.cpp)
+target_sources(poc PRIVATE font.cpp main.cpp)
 target_link_libraries(poc PRIVATE oto)
 
