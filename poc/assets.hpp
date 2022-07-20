@@ -9,8 +9,9 @@
 static constexpr const auto HALF_VALUE = 128;
 
 static float p = 0;
+static float mult = 1.0;
 static void music_callback(std::span<float> data) {
-  float mult = 1.0; // romance = 1x; gameover = 2x
+  float mult = 1.0;
   for (int i = 0; i < data.size(); i++) {
     data[i] = sin(p * 0.25 * mult);
     p += 0.05;
@@ -60,7 +61,15 @@ struct asset {
   static oto::texture load_background(poc::domain::background bck) {
     return oto::r::create_color_texture(HALF_VALUE, HALF_VALUE, bg_color(bck));
   }
-  static auto load_music(poc::domain::music /**/) {
+  static auto load_music(poc::domain::music mus) {
+    switch (mus) {
+    case poc::domain::romance:
+      mult = 1.0f;
+      break;
+    case poc::domain::game_over:
+      mult = 2.0f;
+      break;
+    }
     return music_callback;
   }
   static oto::texture load_text_background(poc::domain::background bck) {
