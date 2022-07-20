@@ -65,6 +65,9 @@ struct asset {
       return oto::rect { ACTOR_W * 3, ACTOR_Y, ACTOR_W, ACTOR_H };
     }
   }
+  static auto size_of_font(poc::domain::background /**/) {
+    return oto::size { .w = 4, .h = 8 };
+  }
 };
 
 oto::v_engine * oto::create_engine() {

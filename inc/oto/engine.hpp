@@ -6,18 +6,22 @@
 #include "oto/v_engine.hpp"
 #include "oto/vm.hpp"
 
+#include <string_view>
+
 namespace oto {
   template<domain D, assets<D> A>
   class engine : public v_engine {
     enum state { run, pause, sleep, speak };
 
     texture m_actor {};
+    std::string_view m_actor_name {};
     rect m_actor_rect {};
     texture m_background {};
+    state m_state = run;
     texture m_text_background {};
     texture m_text_font {};
+    size m_text_chr_size {};
     std::chrono::time_point<clock> m_timer {};
-    state m_state = run;
 
     vm<D> m_vm;
 
@@ -40,6 +44,7 @@ namespace oto {
       m_background = A::load_background(*bck);
       m_text_background = A::load_text_background(*bck);
       m_text_font = A::load_text_font(*bck);
+      m_text_chr_size = A::size_of_font(*bck);
       return run;
     }
     state operator()(const opcodes::choose<D> & /**/) {
@@ -59,6 +64,7 @@ namespace oto {
     }
     state operator()(const opcodes::speak<D> & spk) {
       m_actor = A::load_actor(spk.actor);
+      m_actor_name = D::actor_to_cstr(spk.actor);
       m_actor_rect = A::rect_of_side(spk.side);
       return speak;
     }
@@ -84,6 +90,7 @@ namespace oto {
       if (m_background) oto::r::draw(m_background);
       if (m_actor) oto::r::draw(m_actor, m_actor_rect);
       if (m_text_background) oto::r::draw(m_text_background, text_bg_rect);
+      if (m_actor && !m_actor_name.empty()) oto::r::draw_string(m_text_font, m_text_chr_size, "hello", 10, 10);
     }
   };
 }

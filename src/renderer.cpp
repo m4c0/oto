@@ -57,14 +57,17 @@ oto::texture oto::r::create_color_texture(int width, int height, unsigned rgb) {
 }
 oto::texture oto::r::create_rgba_texture(int width, int height, std::span<const unsigned> data) {
   static constexpr const auto bits_per_pixel = 32;
-  static constexpr const auto pixel_format = SDL_PixelFormatEnum::SDL_PIXELFORMAT_RGBA8888;
-  static constexpr const auto mask = 0xFF;
+  static constexpr const auto r_mask = 0xFFU << 24;
+  static constexpr const auto g_mask = 0xFFU << 16;
+  static constexpr const auto b_mask = 0xFFU << 8;
+  static constexpr const auto a_mask = 0xFFU;
 
   const unsigned pitch = width * sizeof(unsigned);
 
   void * ptr = const_cast<unsigned *>(data.data()); // NOLINT
 
-  SDL_Surface * surf = SDL_CreateRGBSurfaceFrom(ptr, width, height, bits_per_pixel, pitch, mask, mask, mask, mask);
+  SDL_Surface * surf =
+      SDL_CreateRGBSurfaceFrom(ptr, width, height, bits_per_pixel, pitch, r_mask, g_mask, b_mask, a_mask);
 
   SDL_Texture * txt = SDL_CreateTextureFromSurface(g_renderer, surf);
   SDL_FreeSurface(surf);
@@ -83,6 +86,21 @@ void oto::r::draw(const oto::texture & txt, const oto::rect & rect) {
     .h = rect.h,
   };
   SDL_RenderCopy(g_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), nullptr, &sdl_rect); // NOLINT
+}
+void oto::r::draw(const oto::texture & txt, const oto::rect & clip, const oto::rect & target) {
+  SDL_Rect from = { .x = clip.x, .y = clip.y, .w = clip.w, .h = clip.h };
+  SDL_Rect to = { .x = target.x, .y = target.y, .w = target.w, .h = target.h };
+  SDL_RenderCopy(g_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), &from, &to); // NOLINT
+}
+
+void oto::r::draw_string(const oto::texture & font, const size & chr_size, std::string_view str, int x, int y) {
+  rect tgt { .x = x, .y = y, .w = chr_size.w, .h = chr_size.h };
+  for (auto chr : str) {
+    int cx = static_cast<int>(chr) * chr_size.w;
+    rect from { .x = cx, .y = 0, .w = chr_size.w, .h = chr_size.h };
+    draw(font, from, tgt);
+    tgt.x += chr_size.w;
+  }
 }
 
 void oto::r::set_audio_callback(audio_callback_t cbk) {
