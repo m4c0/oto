@@ -4,9 +4,17 @@
 #include "main.hpp"
 #include "oto/renderer.hpp"
 
+#include <cmath>
+
 static constexpr const auto HALF_VALUE = 128;
 
-static void music_callback(std::span<float> /**/) {
+static float p = 0;
+static void music_callback(std::span<float> data) {
+  float mult = 1.0; // romance = 1x; gameover = 2x
+  for (int i = 0; i < data.size(); i++) {
+    data[i] = sin(p * 0.25 * mult);
+    p += 0.05;
+  }
 }
 
 static constexpr auto act_name(poc::domain::actor act) {
