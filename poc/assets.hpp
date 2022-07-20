@@ -9,6 +9,17 @@ static constexpr const auto HALF_VALUE = 128;
 static void music_callback(std::span<float> /**/) {
 }
 
+static constexpr auto act_name(poc::domain::actor act) {
+  switch (act) {
+  case poc::domain::lefty:
+    return "Lefty";
+  case poc::domain::midly:
+  case poc::domain::midly_hot:
+    return "Midly";
+  case poc::domain::righty:
+    return "Righty";
+  }
+}
 static constexpr unsigned act_color(poc::domain::actor act) {
   switch (act) {
   case poc::domain::lefty:
@@ -32,6 +43,9 @@ static constexpr unsigned bg_color(poc::domain::background bck) {
   }
 }
 struct asset {
+  static const char * actor_name(poc::domain::actor act) {
+    return act_name(act);
+  }
   static oto::texture load_actor(poc::domain::actor act) {
     return oto::r::create_color_texture(HALF_VALUE, HALF_VALUE, act_color(act));
   }
