@@ -90,7 +90,7 @@ namespace oto {
       if (m_background) oto::r::draw(m_background);
       if (m_actor) oto::r::draw(m_actor, m_actor_rect);
       if (m_text_background) oto::r::draw(m_text_background, text_bg_rect);
-      if (m_actor && !m_actor_name.empty()) oto::r::draw_string(m_text_font, m_text_chr_size, m_actor_name, 10, 10);
+      if (m_actor && !m_actor_name.empty()) oto::r::draw_string(m_text_font, m_text_chr_size, m_actor_name, 10, 410);
     }
   };
 }
