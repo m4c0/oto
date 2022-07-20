@@ -86,8 +86,8 @@ namespace oto {
       static constexpr const rect text_bg_rect = { .x = 0, .y = 400, .w = 800, .h = 200 };
       static constexpr const auto actor_name_x = 10;
       static constexpr const auto actor_name_y = 410;
-      static constexpr const auto text_x = 40;
-      static constexpr const auto text_y = 500;
+      static constexpr const auto text_x = 30;
+      static constexpr const auto text_y = 480;
 
       do {
         m_state = step();

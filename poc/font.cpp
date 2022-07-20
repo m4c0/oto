@@ -9,6 +9,48 @@ static constexpr const auto char_rows = 5;
 static constexpr const auto chars = [] {
   std::array<std::string_view, max_chars> ascii {};
 
+  ascii['\''] = " X  "
+                " X  "
+                "    "
+                "    "
+                "    ";
+
+  ascii[','] = "    "
+               "    "
+               "    "
+               " X  "
+               "X   ";
+
+  ascii['?'] = "XXX "
+               "  X "
+               " X  "
+               "    "
+               " X  ";
+
+  ascii['!'] = " X  "
+               " X  "
+               " X  "
+               "    "
+               " X  ";
+
+  ascii['a'] = "XXX "
+               "X X "
+               "XXX "
+               "X X "
+               "X X ";
+
+  ascii['b'] = "XX  "
+               "X X "
+               "XXX "
+               "X X "
+               "XX  ";
+
+  ascii['c'] = "XXX "
+               "X   "
+               "X   "
+               "X   "
+               "XXX ";
+
   ascii['d'] = "XX  "
                "X X "
                "X X "
@@ -45,6 +87,18 @@ static constexpr const auto chars = [] {
                " X  "
                "XXX ";
 
+  ascii['j'] = "  X "
+               "  X "
+               "  X "
+               "X X "
+               "XXX ";
+
+  ascii['k'] = "X X "
+               "X X "
+               "XX  "
+               "X X "
+               "X X ";
+
   ascii['l'] = "X   "
                "X   "
                "X   "
@@ -57,10 +111,28 @@ static constexpr const auto chars = [] {
                "X X "
                "X X ";
 
+  ascii['n'] = "X X "
+               "XXX "
+               "X X "
+               "X X "
+               "X X ";
+
   ascii['o'] = "XXX "
                "X X "
                "X X "
                "X X "
+               "XXX ";
+
+  ascii['p'] = "XXX "
+               "X X "
+               "XXX "
+               "X   "
+               "X   ";
+
+  ascii['q'] = "XXX "
+               "X X "
+               "X X "
+               "XXX "
                "XXX ";
 
   ascii['r'] = "XX  "
@@ -69,17 +141,53 @@ static constexpr const auto chars = [] {
                "XX  "
                "X X ";
 
+  ascii['s'] = "XXX "
+               "X   "
+               "XXX "
+               "  X "
+               "XXX ";
+
   ascii['t'] = "XXX "
                " X  "
                " X  "
                " X  "
                " X  ";
 
+  ascii['u'] = "X X "
+               "X X "
+               "X X "
+               "X X "
+               "XXX ";
+
+  ascii['v'] = "X X "
+               "X X "
+               "X X "
+               "X X "
+               " X  ";
+
+  ascii['w'] = "X X "
+               "X X "
+               "X X "
+               "XXX "
+               "XXX ";
+
+  ascii['x'] = "X X "
+               "X X "
+               " X  "
+               "X X "
+               "X X ";
+
   ascii['y'] = "X X "
                "X X "
                " X  "
                " X  "
                " X  ";
+
+  ascii['z'] = "XXX "
+               "  X "
+               " X  "
+               "X   "
+               "XXX ";
 
   for (auto c = 'a', d = 'A'; c <= 'z'; c++, d++) {
     ascii.at(d) = ascii.at(c);
