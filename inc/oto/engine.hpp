@@ -20,6 +20,7 @@ namespace oto {
     state m_state = run;
     texture m_text_background {};
     texture m_text_font {};
+    std::string_view m_text_line {};
     size m_text_chr_size {};
     std::chrono::time_point<clock> m_timer {};
 
@@ -66,6 +67,7 @@ namespace oto {
       m_actor = A::load_actor(spk.actor);
       m_actor_name = A::actor_name(spk.actor);
       m_actor_rect = A::rect_of_side(spk.side);
+      m_text_line = spk.text;
       return speak;
     }
     state operator()(std::monostate /**/) {
@@ -82,6 +84,10 @@ namespace oto {
 
     void run_frame() override {
       static constexpr const rect text_bg_rect = { .x = 0, .y = 400, .w = 800, .h = 200 };
+      static constexpr const auto actor_name_x = 10;
+      static constexpr const auto actor_name_y = 410;
+      static constexpr const auto text_x = 40;
+      static constexpr const auto text_y = 500;
 
       do {
         m_state = step();
@@ -89,8 +95,12 @@ namespace oto {
 
       if (m_background) oto::r::draw(m_background);
       if (m_actor) oto::r::draw(m_actor, m_actor_rect);
-      if (m_text_background) oto::r::draw(m_text_background, text_bg_rect);
-      if (m_actor && !m_actor_name.empty()) oto::r::draw_string(m_text_font, m_text_chr_size, m_actor_name, 10, 410);
+
+      if (m_state == speak) {
+        r::draw(m_text_background, text_bg_rect);
+        r::draw_string(m_text_font, m_text_chr_size, m_actor_name, actor_name_x, actor_name_y);
+        r::draw_string(m_text_font, m_text_chr_size, m_text_line, text_x, text_y);
+      }
     }
   };
 }
