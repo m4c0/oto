@@ -6,6 +6,7 @@
 #include "oto/v_engine.hpp"
 #include "oto/vm.hpp"
 
+#include <chrono>
 #include <string_view>
 
 namespace oto {
@@ -68,6 +69,7 @@ namespace oto {
       m_actor_name = A::actor_name(spk.actor);
       m_actor_rect = A::rect_of_side(spk.side);
       m_text_line = spk.text;
+      m_timer = clock::now();
       return speak;
     }
     state operator()(std::monostate /**/) {
@@ -79,7 +81,13 @@ namespace oto {
         m_state = run;
         m_actor.reset();
       }
-      if (m_state == speak) m_state = run;
+      if (m_state == speak) {
+        if (m_timer == decltype(m_timer) {}) {
+          m_state = run;
+        } else {
+          m_timer = {};
+        }
+      }
     }
 
     void run_frame() override {
@@ -97,9 +105,20 @@ namespace oto {
       if (m_actor) oto::r::draw(m_actor, m_actor_rect);
 
       if (m_state == speak) {
+        using namespace std::literals;
+        static constexpr const auto time_per_char = 50ms;
+
         r::draw(m_text_background, text_bg_rect);
         r::draw_string(m_text_font, m_text_chr_size, m_actor_name, actor_name_x, actor_name_y);
-        r::draw_string(m_text_font, m_text_chr_size, m_text_line, text_x, text_y);
+
+        auto chars = (clock::now() - m_timer) / time_per_char;
+        if (chars >= m_text_line.size()) {
+          r::draw_string(m_text_font, m_text_chr_size, m_text_line, text_x, text_y);
+          m_timer = {};
+        } else {
+          auto txt = m_text_line.substr(0, chars);
+          r::draw_string(m_text_font, m_text_chr_size, txt, text_x, text_y);
+        }
       }
     }
   };
