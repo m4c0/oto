@@ -1,4 +1,8 @@
 function(dumper NAME)
+  if (CMAKE_CROSSCOMPILING)
+    return()
+  endif()
+
   set(TARGET dump-${NAME})
 
   add_executable(${TARGET})

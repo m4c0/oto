@@ -8,7 +8,7 @@ include(FetchContent)
 FetchContent_Declare(
   casein
   GIT_REPOSITORY git@github.com:m4c0/casein
-  GIT_TAG a0316f9c6361fac5613ed9d77cffd40088ce756b)
+  GIT_TAG 9606de44b9793bbda79dcdebdc62d8f735a783e7)
 FetchContent_MakeAvailable(casein)
 
 find_package(SDL2 REQUIRED)
