@@ -6,14 +6,10 @@
 
 // NOLINTNEXTLINE
 SDL_Renderer * g_renderer = nullptr;
-// NOLINTNEXTLINE
-void (*g_audio_callback)(std::span<float>) = [](auto data) {
-  std::fill(data.begin(), data.end(), 0);
-};
 
 static void audio_callback(void * /*user*/, Uint8 * str, int len) {
   float * fptr = reinterpret_cast<float *>(str); // NOLINT
-  g_audio_callback(std::span(fptr, len / sizeof(float)));
+  oto::r::audio_callback()(std::span(fptr, len / sizeof(float)));
 }
 
 static void init_audio() {
@@ -100,10 +96,6 @@ void oto::r::draw_string(const oto::texture & font, const size & chr_size, std::
     draw(font, from, tgt);
     tgt.x += chr_size.w;
   }
-}
-
-void oto::r::set_audio_callback(audio_callback_t cbk) {
-  g_audio_callback = cbk;
 }
 
 void oto::r::deleter::operator()(oto::r::texture_ptr * txt) const {

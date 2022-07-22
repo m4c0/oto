@@ -25,6 +25,3 @@ void oto::r::draw(const oto::texture & txt, const oto::rect & clip, const oto::r
 
 void oto::r::draw_string(const oto::texture & font, const oto::size & chr_size, std::string_view str, int x, int y) {
 }
-
-void oto::r::set_audio_callback(oto::r::audio_callback_t cbk) {
-}

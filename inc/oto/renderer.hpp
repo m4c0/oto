@@ -33,7 +33,7 @@ namespace oto::r {
   void draw(const oto::texture & txt, const rect & clip, const rect & target);
   void draw_string(const oto::texture & font, const size & chr_size, std::string_view str, int x, int y);
 
-  void set_audio_callback(audio_callback_t cbk);
+  audio_callback_t & audio_callback();
 
   [[nodiscard]] oto::texture create_color_texture(int width, int height, unsigned rgb);
   [[nodiscard]] oto::texture create_rgba_texture(int width, int height, std::span<const unsigned> data);

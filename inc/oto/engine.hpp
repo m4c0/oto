@@ -53,7 +53,7 @@ namespace oto {
       return pause;
     }
     state operator()(const opcodes::music<D> & mus) {
-      oto::r::set_audio_callback(A::load_music(*mus));
+      oto::r::audio_callback() = A::load_music(*mus);
       return run;
     }
     state operator()(const opcodes::pause & /**/) {

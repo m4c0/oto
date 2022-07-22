@@ -4,6 +4,13 @@
 
 #include <memory>
 
+oto::r::audio_callback_t & oto::r::audio_callback() {
+  static void (*g_audio_callback)(std::span<float>) = [](auto data) {
+    std::fill(data.begin(), data.end(), 0);
+  };
+  return g_audio_callback;
+}
+
 void casein_event(const casein::event & evt) {
   static std::unique_ptr<oto::v_engine> eng;
 
