@@ -15,6 +15,7 @@
       const imp = {
               env: { loggy: print_cstr },
               wasi_snapshot_preview1: {
+                clock_time_get: () => { console.log("clock_time_get") },
                 fd_close: () => { console.log("fd_close") },
                 fd_seek: () => { console.log("fd_seek") },
                 fd_write: () => { console.log("fd_write") },
