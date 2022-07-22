@@ -1,5 +1,4 @@
 #include "oto/renderer.hpp"
-#include "renderer.hpp"
 
 #include <SDL.h>
 #include <span>

@@ -26,6 +26,8 @@ namespace oto {
 namespace oto::r {
   using audio_callback_t = void (*)(std::span<float>);
 
+  void init(void * hnd);
+
   void draw(const oto::texture & txt);
   void draw(const oto::texture & txt, const rect & rect);
   void draw(const oto::texture & txt, const rect & clip, const rect & target);
