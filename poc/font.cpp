@@ -222,8 +222,8 @@ static constexpr const auto bitmap_stride = xmap_stride * bitmap_size_factor;
 static constexpr const auto bitmap_rows = xmap_rows * bitmap_size_factor;
 static constexpr const auto bitmap_size = bitmap_stride * bitmap_rows;
 
+static std::array<unsigned, bitmap_size> bmap {};
 oto::texture poc::load_text_font() {
-  std::array<unsigned, bitmap_size> bmap {};
   for (auto i = 0; i < bitmap_size; i++) {
     auto x = (i % bitmap_stride) / bitmap_size_factor;
     auto y = (i / bitmap_stride) / bitmap_size_factor;
