@@ -16,15 +16,15 @@ target_compile_features(oto-headers INTERFACE cxx_std_20)
 target_include_directories(oto-headers INTERFACE inc)
 
 add_library(oto STATIC)
+target_sources(oto PRIVATE src/main.cpp)
 target_link_libraries(oto PUBLIC oto-headers)
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL "WASI")
-  target_sources(oto PRIVATE wasm/main.cpp)
   target_link_libraries(oto PUBLIC casein)
   target_link_options(oto PUBLIC -Wl,--allow-undefined-file=${CMAKE_CURRENT_SOURCE_DIR}/wasm/extern.syms)
 else()
   find_package(SDL2 REQUIRED)
-  target_sources(oto PRIVATE sdl/main.cpp sdl/renderer.cpp)
+  target_sources(oto PRIVATE sdl/renderer.cpp)
   target_link_libraries(oto PUBLIC casein-sdl)
 endif()
 
