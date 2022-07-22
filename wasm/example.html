@@ -1,43 +1,7 @@
 <html>
   <head><title>Oto Proof-of-Concept</title></head>
   <body>
-    <script type="text/javascript">
-      var exp;
-      function print_cstr(ptr) {
-              const view = new Uint8Array(exp.memory.buffer);
-              var str = '';
-              while (view[ptr] != 0) {
-                      str += String.fromCharCode(view[ptr]);
-                      ptr++;
-                    }
-              console.log(str);
-            }
-      const imp = {
-              env: { loggy: print_cstr },
-              wasi_snapshot_preview1: {
-                clock_time_get: () => { console.log("clock_time_get") },
-                fd_close: () => { console.log("fd_close") },
-                fd_seek: () => { console.log("fd_seek") },
-                fd_write: () => { console.log("fd_write") },
-                proc_exit: () => { throw "oops" }
-              },
-            };
-
-      function repaint() {
-        exp.casein_repaint();
-        window.requestAnimationFrame(repaint);
-      }
-      function start(exports) {
-        exp = exports;
-        exp._start();
-        window.requestAnimationFrame(repaint);
-      }
-
-      fetch('poc/poc')
-        .then(response => response.arrayBuffer())
-        .then(bytes => WebAssembly.instantiate(bytes, imp))
-        .then(obj => obj.instance.exports)
-        .then(start);
-    </script>
+    <canvas id="app" width="800" height="600"></canvas>
+    <script type="text/javascript" src="example.js"></script>
   </body>
 </html>
