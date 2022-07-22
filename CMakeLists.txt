@@ -8,7 +8,7 @@ include(FetchContent)
 FetchContent_Declare(
   casein
   GIT_REPOSITORY git@github.com:m4c0/casein
-  GIT_TAG b54d6e18bde657357e2f9bbad692d9e51d863822)
+  GIT_TAG b1812ccf025385398ddc2a782c4a66d5ecaff16f)
 FetchContent_MakeAvailable(casein)
 
 add_library(oto-headers INTERFACE)
@@ -23,7 +23,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "WASI")
   target_compile_options(oto PUBLIC -fno-exceptions)
   target_sources(oto PRIVATE wasm/extern.cpp)
   target_link_libraries(oto PUBLIC casein c++abi)
-  target_link_options(oto PUBLIC -Wl,--allow-undefined-file=${CMAKE_CURRENT_SOURCE_DIR}/wasm/extern.syms)
+  target_link_options(oto PUBLIC -Wl,--allow-undefined-file=${CMAKE_CURRENT_SOURCE_DIR}/wasm/extern.syms -mexec-model=reactor)
 else()
   find_package(SDL2 REQUIRED)
   target_sources(oto PRIVATE sdl/renderer.cpp)
