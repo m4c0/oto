@@ -22,6 +22,3 @@ void oto::r::draw(const oto::texture & txt, const oto::rect & rect) {
 
 void oto::r::draw(const oto::texture & txt, const oto::rect & clip, const oto::rect & target) {
 }
-
-void oto::r::draw_string(const oto::texture & font, const oto::size & chr_size, std::string_view str, int x, int y) {
-}

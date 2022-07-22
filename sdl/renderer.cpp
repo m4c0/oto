@@ -88,16 +88,6 @@ void oto::r::draw(const oto::texture & txt, const oto::rect & clip, const oto::r
   SDL_RenderCopy(g_renderer, reinterpret_cast<SDL_Texture *>(txt.get()), &from, &to); // NOLINT
 }
 
-void oto::r::draw_string(const oto::texture & font, const size & chr_size, std::string_view str, int x, int y) {
-  rect tgt { .x = x, .y = y, .w = chr_size.w, .h = chr_size.h };
-  for (auto chr : str) {
-    int cx = static_cast<int>(chr) * chr_size.w;
-    rect from { .x = cx, .y = 0, .w = chr_size.w, .h = chr_size.h };
-    draw(font, from, tgt);
-    tgt.x += chr_size.w;
-  }
-}
-
 void oto::r::deleter::operator()(oto::r::texture_ptr * txt) const {
   SDL_DestroyTexture(reinterpret_cast<SDL_Texture *>(txt)); // NOLINT
 }
