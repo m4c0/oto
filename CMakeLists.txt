@@ -8,7 +8,7 @@ include(FetchContent)
 FetchContent_Declare(
   casein
   GIT_REPOSITORY git@github.com:m4c0/casein
-  GIT_TAG 9606de44b9793bbda79dcdebdc62d8f735a783e7)
+  GIT_TAG b54d6e18bde657357e2f9bbad692d9e51d863822)
 FetchContent_MakeAvailable(casein)
 
 add_library(oto-headers INTERFACE)

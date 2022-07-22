@@ -2,9 +2,9 @@
   <head><title>Casein Proof-of-Concept</title></head>
   <body>
     <script type="text/javascript">
-      var memory;
+      var exp;
       function print_cstr(ptr) {
-              const view = new Uint8Array(memory.buffer);
+              const view = new Uint8Array(exp.memory.buffer);
               var str = '';
               while (view[ptr] != 0) {
                       str += String.fromCharCode(view[ptr]);
@@ -22,11 +22,21 @@
               },
             };
 
+      function repaint() {
+        exp.casein_repaint();
+        window.requestAnimationFrame(repaint);
+      }
+      function start(exports) {
+        exp = exports;
+        exp._start();
+        window.requestAnimationFrame(repaint);
+      }
+
       fetch('poc/poc')
         .then(response => response.arrayBuffer())
         .then(bytes => WebAssembly.instantiate(bytes, imp))
         .then(obj => obj.instance.exports)
-        .then(exp => { memory = exp.memory; exp._start() })
+        .then(start);
     </script>
   </body>
 </html>
